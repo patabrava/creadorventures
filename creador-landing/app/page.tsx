@@ -1,5 +1,6 @@
 import Hero from '@/components/Hero';
 import VerticalSections from '@/components/VerticalSections';
+import CTASection from '@/components/CTASection';
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
           subheadline="Creador Ventures blends AI insight with local intuition to fund and accelerate bold founders in LATAM, Africa, Eastern Europe, and the Hispanic USA."
         />
         <VerticalSections />
+        <CTASection id="cta" />
       </div>
     </>
   );

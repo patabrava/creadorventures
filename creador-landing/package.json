@@ -17,6 +17,7 @@
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0",
     "react": "^19.0.0",
+    "react-calendly": "^4.3.1",
     "react-dom": "^19.0.0",
     "zod": "^3.24.4"
   },
