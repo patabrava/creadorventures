@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import ScrollToSection from './ScrollToSection';
 
 interface NavigationLink {
   id: string;

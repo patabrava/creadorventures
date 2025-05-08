@@ -10,8 +10,7 @@ export default function Home() {
         padding: 0,
         margin: 0,
         backgroundColor: 'var(--paper)',
-        color: 'var(--ink)',
-        marginTop: '80px' // Add margin for the fixed header
+        color: 'var(--ink)'
       }}>
         <Hero
           headline="Building value where others overlook"

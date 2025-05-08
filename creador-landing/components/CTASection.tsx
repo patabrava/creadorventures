@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import CtaButton from './CtaButton';
 import CalendlyModal from './CalendlyModal';
 import { useAnimatedVisibility } from '@/hooks/useAnimatedVisibility';
@@ -12,6 +13,7 @@ interface CTAProps {
 export default function CTASection({ id }: CTAProps) {
   const { ref, isVisible } = useAnimatedVisibility<HTMLElement>();
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const router = useRouter();
   
   const closeModal = () => setActiveModal(null);
 
@@ -102,7 +104,7 @@ export default function CTASection({ id }: CTAProps) {
               onClick={() => {
                 // For funding applications, we'd redirect to a form page
                 // This would be implemented in the forms phase
-                window.location.href = '/apply';
+                router.push('/apply');
                 // Track with GA4
                 try {
                   // TODO: Implement GA4 tracking

@@ -19,11 +19,12 @@ export default function Hero({ headline, subheadline }: HeroProps) {
         padding: 0,
         margin: 0,
         width: '100%',
-        height: '90vh',
+        height: '100vh',
         position: 'relative',
         backgroundColor: 'var(--ink)',
         color: 'var(--paper)',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        marginTop: '-80px'
       }}
     >
       <div style={{
@@ -35,7 +36,8 @@ export default function Hero({ headline, subheadline }: HeroProps) {
         backgroundColor: 'var(--ink)',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        paddingTop: '80px'
       }}>
         {/* Background would be a video in production version */}
         

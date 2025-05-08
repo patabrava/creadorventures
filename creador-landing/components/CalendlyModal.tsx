@@ -10,8 +10,8 @@ declare global {
       initInlineWidget: (options: {
         url: string;
         parentElement: HTMLElement | null;
-        prefill?: Record<string, any>;
-        utm?: Record<string, any>;
+        prefill?: Record<string, unknown>;
+        utm?: Record<string, unknown>;
       }) => void;
     };
   }
@@ -45,20 +45,23 @@ export default function CalendlyModal({
     setIsLoading(true);
     setError(null);
     
+    // Store ref value to use in cleanup function
+    const currentCalendlyContainer = calendlyContainerRef.current;
+    
     // Function to initialize the widget
     const initializeCalendly = () => {
       if (!isMounted) return;
       
-      if (window.Calendly && calendlyContainerRef.current) {
+      if (window.Calendly && currentCalendlyContainer) {
         try {
           // Small delay to ensure DOM is ready
           setTimeout(() => {
             if (!isMounted) return;
             
-            if (window.Calendly && calendlyContainerRef.current) {
+            if (window.Calendly && currentCalendlyContainer) {
               window.Calendly.initInlineWidget({
                 url: calendlyUrl,
-                parentElement: calendlyContainerRef.current,
+                parentElement: currentCalendlyContainer,
                 prefill: {}
               });
               setIsLoading(false);
@@ -92,9 +95,9 @@ export default function CalendlyModal({
     // Cleanup function
     return () => {
       isMounted = false;
-      if (calendlyContainerRef.current) {
+      if (currentCalendlyContainer) {
         // Clear the container if needed
-        calendlyContainerRef.current.innerHTML = '';
+        currentCalendlyContainer.innerHTML = '';
       }
     };
   }, [isOpen, calendlyUrl]);

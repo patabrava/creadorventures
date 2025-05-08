@@ -1,11 +1,12 @@
 import pino from 'pino';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
+const isNode = typeof window === 'undefined';
 
 // Configure pino logger with appropriate options
 const logger = pino({
   level: isDevelopment ? 'debug' : 'info',
-  transport: isDevelopment
+  transport: isDevelopment && isNode
     ? {
         target: 'pino-pretty',
         options: {
