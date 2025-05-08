@@ -14,7 +14,7 @@ const verticalSections: VerticalSectionProps[] = [
   {
     title: 'GRIT – Startup Sourcing and Events',
     description: 'We scout rising talent through cultural gatherings that mix music, art, and local tech scenes. Each event feeds the Startup League, giving partners a first look at high-potential teams.',
-    imagePath: '/ChatGPT Image 8. Mai 2025, 04_35_00.png'
+    imagePath: '/dark founders.png'
   },
   {
     title: 'Creador Labs – Venture Studio and Portfolio',
