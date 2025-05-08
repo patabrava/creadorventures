@@ -1,0 +1,6 @@
+# YAML files
+*.yaml
+*.yml
+
+# Testing files in root directory
+plan_testscript.yaml 
