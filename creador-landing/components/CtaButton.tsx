@@ -41,7 +41,7 @@ export default function CtaButton({
     transition: 'var(--transition-fast)',
     opacity: disabled ? 0.6 : 1,
     position: 'relative',
-    paddingLeft: '40px', // Space for the arrow
+    // No need for extra paddingLeft since CSS handles the arrow spacing
   } as const;
 
   // Calculate size-dependent styles
@@ -91,16 +91,6 @@ export default function CtaButton({
         ...variantStyles,
       }}
     >
-      <span 
-        style={{
-          position: 'absolute',
-          left: '20px',
-          top: '50%',
-          transform: 'translateY(-50%)'
-        }}
-      >
-        →
-      </span>
       {children}
     </button>
   );
