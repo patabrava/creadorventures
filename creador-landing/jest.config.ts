@@ -11,7 +11,7 @@ const customJestConfig: Config = {
   // Add more setup options before each test is run
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   // Set test environment
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
   // Define test patterns
   testMatch: ['**/__tests__/**/*.test.ts', '**/__tests__/**/*.test.tsx'],
   // Define which files to transform
@@ -21,6 +21,7 @@ const customJestConfig: Config = {
   // Define module name mapper if needed
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
+    '^contentlayer/generated$': '<rootDir>/.contentlayer/generated',
   },
   // Define coverage configuration
   collectCoverageFrom: [

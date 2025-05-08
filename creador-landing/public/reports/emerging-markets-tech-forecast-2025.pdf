@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sample Report</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px;
+      line-height: 1.6;
+    }
+    h1 {
+      font-size: 36px;
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
+    h2 {
+      font-size: 24px;
+      font-weight: 300;
+      margin-top: 40px;
+      margin-bottom: 16px;
+    }
+    p {
+      margin-bottom: 16px;
+    }
+    .date {
+      color: #666;
+      margin-bottom: 40px;
+    }
+    .logo {
+      text-align: right;
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">Creador Ventures</div>
+  <h1>Sample Report</h1>
+  <div class="date">May 2025</div>
+  
+  <p>
+    This is a placeholder for the actual report PDF content. In a real implementation, 
+    this would be a properly formatted PDF document with complete research findings.
+  </p>
+  
+  <h2>Key Findings</h2>
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel tincidunt magna, 
+    ac tempor libero. Sed dignissim, leo ut tincidunt luctus, nisl massa bibendum magna, 
+    at fringilla arcu urna ut leo. Suspendisse potenti.
+  </p>
+  
+  <h2>Methodology</h2>
+  <p>
+    Quisque varius, purus vitae hendrerit ultrices, justo elit feugiat urna, sed 
+    ullamcorper nulla risus a lacus. Integer quis facilisis neque. Maecenas ultrices 
+    massa sit amet dolor malesuada, sit amet porta justo finibus.
+  </p>
+  
+  <h2>Conclusions</h2>
+  <p>
+    Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia 
+    curae; Sed gravida magna nec ex porttitor, in lobortis arcu vulputate. Sed dapibus 
+    metus neque, eget consectetur enim faucibus in. Praesent malesuada leo a nulla 
+    aliquet condimentum.
+  </p>
+</body>
+</html> 

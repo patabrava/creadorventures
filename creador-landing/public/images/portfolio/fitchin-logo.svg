@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="820" height="120" viewBox="0 0 820 120">
+  <style>
+    .txt { 
+      font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+      font-size:72px; 
+      font-weight:700;
+      fill:#FFFFFF;
+    }
+  </style>
+
+  <!-- Transparent background -->
+  <rect width="100%" height="100%" fill="none"/>
+
+  <!-- Company name -->
+  <text x="0"   y="88" class="txt">Creador.</text>
+  <text x="430" y="88" class="txt">Ventures.</text>
+
+  <!-- Minimalist arrow -->
+  <path d="M770 32 L810 60 L770 88" 
+        stroke="#FFFFFF" stroke-width="8" 
+        fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
