@@ -193,14 +193,33 @@ export default function Navigation() {
             maxWidth: '480px',
             lineHeight: 1.5
           }}>
-            Get in touch to discuss how we can help accelerate your vision.
           </p>
           <a 
             href="mailto:contact@creadorventures.com"
-            className="btn-primary-dark"
+            className="pill-button"
             style={{
-              display: 'inline-block',
-              maxWidth: 'fit-content'
+              backgroundColor: 'var(--paper)',
+              color: 'var(--ink)',
+              border: 'none',
+              borderRadius: '999px',
+              padding: '4px 16px',
+              fontSize: '16px',
+              fontWeight: 300,
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              transition: 'var(--transition-fast)',
+              textDecoration: 'none',
+              width: 'fit-content',
+              maxWidth: '200px'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.18)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'none';
             }}
           >
             Contact Us
