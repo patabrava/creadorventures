@@ -178,7 +178,7 @@ export default function CTASection({ id }: CTAProps) {
         onClose={closeModal}
         calendlyUrl={calendlyUrls.sponsor}
         fallbackEmail={fallbackEmail}
-        title="Schedule a Sponsor Call"
+        title="Book a Call"
       />
     </section>
   );
