@@ -157,7 +157,7 @@ export default function CTASection({ id }: CTAProps) {
                 }
               }}
             >
-              Schedule sponsor call
+              Book a Call
             </CtaButton>
           </div>
         </div>

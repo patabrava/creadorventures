@@ -81,10 +81,10 @@ export default function Hero({ headline, subheadline }: HeroProps) {
           zIndex: 2
         }}>
           <a 
-            href="#verticals" 
+            href="#video-hero" 
             onClick={(e) => {
               e.preventDefault();
-              const element = document.getElementById('verticals');
+              const element = document.getElementById('video-hero');
               if (element) {
                 element.scrollIntoView({ behavior: 'smooth' });
               }
@@ -118,7 +118,7 @@ export default function Hero({ headline, subheadline }: HeroProps) {
               marginTop: 'var(--space-xs)',
               color: 'var(--paper)'
             }}>
-              Scroll down
+              Learn More
             </p>
           </a>
         </div>

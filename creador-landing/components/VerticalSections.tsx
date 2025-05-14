@@ -12,17 +12,17 @@ interface VerticalSectionProps {
 
 const verticalSections: VerticalSectionProps[] = [
   {
-    title: 'GRIT – Startup Sourcing and Events',
+    title: 'Startup Sourcing and Events',
     description: 'We scout rising talent through cultural gatherings that mix music, art, and local tech scenes. Each event feeds the Startup League, giving partners a first look at high-potential teams.',
     imagePath: '/dark founders.png'
   },
   {
-    title: 'Creador Labs – Venture Studio and Portfolio',
+    title: 'Venture Studio',
     description: 'Our studio backs founders with capital, hands-on guidance, and shared resources. Current projects include The Hub, Fitchin, Solana ID, VIIO, and Heartstocks.',
     imagePath: '/ChatGPT Image 8. Mai 2025, 04_38_09.png'
   },
   {
-    title: 'PRA – Psychology Research Advisory',
+    title: 'Psychology Research Advisory',
     description: 'PRA publishes open reports on counter-cyclical trends and runs bespoke studies for funds, corporates, and public bodies seeking clear insight into underdog markets.',
     imagePath: '/PRA.png'
   }
