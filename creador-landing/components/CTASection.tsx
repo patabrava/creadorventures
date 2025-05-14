@@ -34,17 +34,17 @@ export default function CTASection({ id }: CTAProps) {
       style={{
         backgroundColor: 'var(--ink)',
         color: 'var(--paper)',
-        padding: 'var(--space-xxl) var(--space-lg)',
+        padding: 'var(--space-xxxl) var(--space-lg)',
         position: 'relative',
         marginBottom: 0
       }}
     >
-      <div className="container" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div className="container" style={{ maxWidth: '1400px', margin: '0 auto' }}>
         <h2 style={{
           fontWeight: 300,
-          fontSize: 'var(--font-size-xl)',
-          lineHeight: 1.1,
-          marginBottom: 'var(--space-xl)',
+          fontSize: 'clamp(var(--font-size-xl), 5vw, var(--font-size-xxl))',
+          lineHeight: 1.05,
+          marginBottom: 'var(--space-xxl)',
           textAlign: 'center'
         }}>
           Ready to connect?
@@ -53,25 +53,29 @@ export default function CTASection({ id }: CTAProps) {
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: 'var(--space-xl)',
-          margin: 'var(--space-xl) auto',
-          maxWidth: '1000px'
+          gap: 'var(--space-xxl)',
+          margin: 'var(--space-xxl) auto',
+          maxWidth: '1200px'
         }}>
           {/* Contact Us CTA */}
           <div style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            textAlign: 'center'
+            textAlign: 'center',
+            padding: 'var(--space-lg)',
+            minHeight: '360px',
+            justifyContent: 'space-between'
           }}>
-            <h3 style={{ fontWeight: 300, fontSize: '32px', marginBottom: 'var(--space-md)' }}>
+            <h3 style={{ fontWeight: 300, fontSize: '36px', marginBottom: 'var(--space-lg)' }}>
               Contact Us
             </h3>
-            <p style={{ marginBottom: 'var(--space-lg)', fontSize: '18px' }}>
+            <p style={{ marginBottom: 'var(--space-xl)', fontSize: '20px', lineHeight: 1.5 }}>
               Book a call to discuss partnership opportunities or learn more about our verticals.
             </p>
             <CtaButton 
               variant="dark" 
+              size="large"
               onClick={() => {
                 setActiveModal('contact');
                 // Track with GA4
@@ -92,16 +96,20 @@ export default function CTASection({ id }: CTAProps) {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            textAlign: 'center'
+            textAlign: 'center',
+            padding: 'var(--space-lg)',
+            minHeight: '360px',
+            justifyContent: 'space-between'
           }}>
-            <h3 style={{ fontWeight: 300, fontSize: '32px', marginBottom: 'var(--space-md)' }}>
+            <h3 style={{ fontWeight: 300, fontSize: '36px', marginBottom: 'var(--space-lg)' }}>
               Apply for Funding
             </h3>
-            <p style={{ marginBottom: 'var(--space-lg)', fontSize: '18px' }}>
+            <p style={{ marginBottom: 'var(--space-xl)', fontSize: '20px', lineHeight: 1.5 }}>
               Send your deck and apply for funding through our streamlined process.
             </p>
             <CtaButton 
               variant="dark" 
+              size="large"
               onClick={() => {
                 // For funding applications, we'd redirect to a form page
                 // This would be implemented in the forms phase
@@ -124,16 +132,20 @@ export default function CTASection({ id }: CTAProps) {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            textAlign: 'center'
+            textAlign: 'center',
+            padding: 'var(--space-lg)',
+            minHeight: '360px',
+            justifyContent: 'space-between'
           }}>
-            <h3 style={{ fontWeight: 300, fontSize: '32px', marginBottom: 'var(--space-md)' }}>
+            <h3 style={{ fontWeight: 300, fontSize: '36px', marginBottom: 'var(--space-lg)' }}>
               Become a Sponsor
             </h3>
-            <p style={{ marginBottom: 'var(--space-lg)', fontSize: '18px' }}>
+            <p style={{ marginBottom: 'var(--space-xl)', fontSize: '20px', lineHeight: 1.5 }}>
               Schedule a call to discuss sponsoring our next event or initiative.
             </p>
             <CtaButton 
               variant="dark" 
+              size="large"
               onClick={() => {
                 setActiveModal('sponsor');
                 // Track with GA4
