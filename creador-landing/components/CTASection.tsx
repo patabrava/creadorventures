@@ -35,7 +35,8 @@ export default function CTASection({ id }: CTAProps) {
         backgroundColor: 'var(--ink)',
         color: 'var(--paper)',
         padding: 'var(--space-xxl) var(--space-lg)',
-        position: 'relative'
+        position: 'relative',
+        marginBottom: 0
       }}
     >
       <div className="container" style={{ maxWidth: '1200px', margin: '0 auto' }}>

@@ -62,7 +62,8 @@ export default function RootLayout({
             display: "block",
             flex: "1 0 auto",
             // Add padding to ensure content isn't hidden behind fixed header
-            paddingTop: "80px"
+            paddingTop: "80px",
+            marginBottom: 0
           }}>
             {children}
           </main>
@@ -73,7 +74,8 @@ export default function RootLayout({
             color: "var(--paper)",
             padding: "var(--space-xl)",
             width: "100%",
-            flex: "0 0 auto"
+            flex: "0 0 auto",
+            marginTop: 0
           }}>
             <div className="container">
               <div style={{
