@@ -1,18 +1,20 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 interface NavigationLink {
   id: string;
   label: string;
+  href?: string;
 }
 
 const navLinks: NavigationLink[] = [
-  { id: 'hero', label: 'Home' },
-  { id: 'verticals', label: 'Verticals' },
+  { id: 'hero', label: 'Home', href: '/' },
+  { id: 'verticals', label: 'Verticals', href: '/#verticals' },
+  { id: 'reports', label: 'Reports', href: '/reports' },
   // Other sections will be added in future phases
   // { id: 'portfolio', label: 'Portfolio' },
-  // { id: 'reports', label: 'Reports' },
   // { id: 'events', label: 'Events' },
   // { id: 'team', label: 'Team' },
 ];
@@ -120,28 +122,46 @@ export default function Navigation() {
                 <li key={link.id} style={{
                   marginBottom: 'var(--space-lg)'
                 }}>
-                  <a 
-                    href={`#${link.id}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      const element = document.getElementById(link.id);
-                      if (element) {
-                        element.scrollIntoView({ behavior: 'smooth' });
-                      }
-                      closeMenu();
-                    }}
-                    style={{
-                      color: 'var(--ink)',
-                      textDecoration: 'none',
-                      fontSize: 'var(--font-size-lg)',
-                      fontWeight: 300,
-                      lineHeight: 1.15,
-                      transition: 'var(--transition-fast)',
-                      display: 'block'
-                    }}
-                  >
-                    {link.label}
-                  </a>
+                  {link.href ? (
+                    <Link 
+                      href={link.href}
+                      onClick={closeMenu}
+                      style={{
+                        color: 'var(--ink)',
+                        textDecoration: 'none',
+                        fontSize: 'var(--font-size-lg)',
+                        fontWeight: 300,
+                        lineHeight: 1.15,
+                        transition: 'var(--transition-fast)',
+                        display: 'block'
+                      }}
+                    >
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <a 
+                      href={`#${link.id}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const element = document.getElementById(link.id);
+                        if (element) {
+                          element.scrollIntoView({ behavior: 'smooth' });
+                        }
+                        closeMenu();
+                      }}
+                      style={{
+                        color: 'var(--ink)',
+                        textDecoration: 'none',
+                        fontSize: 'var(--font-size-lg)',
+                        fontWeight: 300,
+                        lineHeight: 1.15,
+                        transition: 'var(--transition-fast)',
+                        display: 'block'
+                      }}
+                    >
+                      {link.label}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>
@@ -159,54 +179,32 @@ export default function Navigation() {
           flexDirection: 'column',
           justifyContent: 'center'
         }}>
-          <div style={{
-            maxWidth: '580px'
+          <h2 style={{
+            fontSize: 'var(--font-size-xxl)',
+            fontWeight: 300,
+            marginBottom: 'var(--space-xl)',
+            maxWidth: '480px'
           }}>
-            <h2 style={{
-              fontSize: 'var(--font-size-xl)',
-              fontWeight: 300,
-              lineHeight: 1.1,
-              marginBottom: 'var(--space-lg)'
-            }}>
-              Get in touch
-            </h2>
-            
-            <a 
-              href="mailto:biz@creador.vc" 
-              style={{
-                fontSize: 'var(--font-size-xxl)',
-                fontWeight: 300,
-                lineHeight: 1.05,
-                color: 'var(--paper)',
-                textDecoration: 'none',
-                display: 'block',
-                marginBottom: 'var(--space-xl)',
-                transition: 'var(--transition-fast)'
-              }}
-            >
-              biz@creador.vc
-            </a>
-            
-            <div style={{
-              borderTop: '1px solid var(--graphite-40)',
-              paddingTop: 'var(--space-lg)'
-            }}>
-              <p style={{
-                fontSize: 'var(--font-size-md)',
-                lineHeight: '28px',
-                marginBottom: 'var(--space-md)'
-              }}>
-                Building value where others overlook.
-              </p>
-              
-              <p style={{
-                fontSize: 'var(--font-size-sm)',
-                color: 'var(--graphite-40)'
-              }}>
-                Bogotá · Miami · Remote
-              </p>
-            </div>
-          </div>
+            Ready to explore overlooked opportunities?
+          </h2>
+          <p style={{
+            fontSize: 'var(--font-size-lg)',
+            marginBottom: 'var(--space-xl)',
+            maxWidth: '480px',
+            lineHeight: 1.5
+          }}>
+            Get in touch to discuss how we can help accelerate your vision.
+          </p>
+          <a 
+            href="mailto:contact@creadorventures.com"
+            className="btn-primary-dark"
+            style={{
+              display: 'inline-block',
+              maxWidth: 'fit-content'
+            }}
+          >
+            Contact Us
+          </a>
         </div>
       </div>
     </>
