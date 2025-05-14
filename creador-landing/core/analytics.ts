@@ -6,7 +6,10 @@ export type GA4EventType =
   | 'funding_apply_submit' 
   | 'calendly_call_booked' 
   | 'sponsor_call_booked' 
-  | 'report_download';
+  | 'report_download'
+  | 'event_video_open'
+  | 'event_video_error'
+  | 'team_social_click';
 
 // Define function type for gtag
 type GtagFunction = (

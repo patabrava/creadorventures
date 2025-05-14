@@ -10,6 +10,11 @@ const nextConfig = {
   // Ensure proper assetPrefix for production
   assetPrefix: process.env.NODE_ENV === 'production' ? undefined : undefined,
   
+  // Add image configuration to allow picsum.photos
+  images: {
+    domains: ['picsum.photos'],
+  },
+  
   // Add additional security headers to prevent interference
   async headers() {
     return [
