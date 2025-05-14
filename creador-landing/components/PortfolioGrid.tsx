@@ -30,57 +30,86 @@ export default function PortfolioGrid({ items }: PortfolioGridProps) {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
+  // Find The Hub in the sorted items, if it exists
+  const theHubItem = sortedItems.find(item => item.slug === 'the-hub');
+  const theHubUrl = theHubItem?.companyUrl || 'https://thehub.example.com';
+
   return (
     <section 
       ref={ref} 
-      className={`py-20 px-6 bg-ink text-paper ${isVisible ? 'visible' : ''}`}
+      className={`py-20 px-6 bg-paper text-ink ${isVisible ? 'visible' : ''}`}
     >
       <div className="container mx-auto max-w-[1440px]">
-        <h2 className="text-[48px] font-light leading-tight mb-8">Portfolio</h2>
-        <p className="text-[18px] leading-[28px] mb-16 max-w-[800px]">
-          A growing collection of companies and protocols shaped inside Creador Labs. 
-          Each tile links to an external deep dive.
-        </p>
+        <h2 className="text-center text-[clamp(56px,8vw,120px)] font-light leading-[1.05] mb-[var(--space-xxxl)]">
+          We give start-ups an<br />unfair advantage
+        </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
-          {sortedItems.map((item) => (
-            <div 
-              key={item.slug}
-              className="portfolio-tile relative h-[50vh] overflow-hidden border-2 border-paper transition-transform hover:translate-y-[-8px] cursor-pointer"
-              onClick={() => handlePortfolioClick(item.title, item.companyUrl)}
-            >
-              {/* Image container with solid background */}
-              <div className="relative w-full h-[calc(100%-80px)] bg-paper">
-                <Image 
-                  src={item.thumbnail}
-                  alt={`${item.title} thumbnail`}
-                  className="object-cover"
-                  fill
-                  priority={item.featured}
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              </div>
-              
-              {/* Solid background for text area */}
-              <div className="absolute bottom-0 left-0 right-0 h-20 bg-paper border-t-2 border-paper z-10" />
-              
-              {/* Logo */}
-              <div className="absolute top-6 left-6 z-20 bg-paper p-2 border border-ink">
-                <Image 
-                  src={item.logo}
-                  alt={`${item.title} logo`}
-                  className="w-auto h-auto"
-                  width={80}
-                  height={32}
-                />
-              </div>
-              
-              {/* Title */}
-              <h3 className="absolute bottom-6 left-6 text-[28px] font-light z-20 max-w-[80%] text-ink">
-                {item.title}
-              </h3>
+        {/* First row of logos */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-12 mb-20">
+          {/* Special placement for THE HUB logo using the jpg version */}
+          <div 
+            className="flex items-center justify-center cursor-pointer transition-transform hover:translate-y-[-8px]"
+            onClick={() => handlePortfolioClick('The Hub', theHubUrl)}
+          >
+            <div className="relative h-[60px] w-full">
+              <Image 
+                src="/images/portfolio/THE HUB LOGO .jpg"
+                alt="The Hub logo"
+                className="object-contain"
+                fill
+                priority={true}
+                sizes="(max-width: 768px) 50vw, 20vw"
+              />
             </div>
-          ))}
+          </div>
+          
+          {/* Rest of the first row logos, excluding The Hub if it's in first 4 items */}
+          {sortedItems
+            .filter(item => item.slug !== 'the-hub')
+            .slice(0, 4)
+            .map((item) => (
+              <div 
+                key={item.slug}
+                className="flex items-center justify-center cursor-pointer transition-transform hover:translate-y-[-8px]"
+                onClick={() => handlePortfolioClick(item.title, item.companyUrl)}
+              >
+                <div className="relative h-[40px] w-full">
+                  <Image 
+                    src={item.logo}
+                    alt={`${item.title} logo`}
+                    className="object-contain"
+                    fill
+                    priority={item.featured}
+                    sizes="(max-width: 768px) 50vw, 20vw"
+                  />
+                </div>
+              </div>
+            ))}
+        </div>
+        
+        {/* Second row of logos */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-12">
+          {sortedItems
+            .filter(item => item.slug !== 'the-hub')
+            .slice(4, 9)
+            .map((item) => (
+              <div 
+                key={item.slug}
+                className="flex items-center justify-center cursor-pointer transition-transform hover:translate-y-[-8px]"
+                onClick={() => handlePortfolioClick(item.title, item.companyUrl)}
+              >
+                <div className="relative h-[40px] w-full">
+                  <Image 
+                    src={item.logo}
+                    alt={`${item.title} logo`}
+                    className="object-contain"
+                    fill
+                    priority={false}
+                    sizes="(max-width: 768px) 50vw, 20vw"
+                  />
+                </div>
+              </div>
+            ))}
         </div>
       </div>
     </section>
