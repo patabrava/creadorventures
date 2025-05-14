@@ -13,10 +13,10 @@ const navLinks: NavigationLink[] = [
   { id: 'hero', label: 'Home', href: '/' },
   { id: 'verticals', label: 'Verticals', href: '/#verticals' },
   { id: 'reports', label: 'Reports', href: '/reports' },
+  { id: 'events', label: 'Events', href: '/events' },
+  { id: 'team', label: 'Team', href: '/team' },
+  { id: 'apply', label: 'Apply', href: '/apply' },
   // Other sections will be added in future phases
-  // { id: 'portfolio', label: 'Portfolio' },
-  // { id: 'events', label: 'Events' },
-  // { id: 'team', label: 'Team' },
 ];
 
 export default function Navigation() {
@@ -228,4 +228,4 @@ export default function Navigation() {
       </div>
     </>
   );
-} 
+}
