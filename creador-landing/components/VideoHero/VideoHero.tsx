@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from 'react';
 import { useAnimatedVisibility } from '@/hooks/useAnimatedVisibility';
 import VideoOverlay from './VideoOverlay';
 import VideoError from './VideoError';
+import CustomCursor from '@/components/CustomCursor';
 
 interface VideoHeroProps {
   previewVideoSrc: string;
@@ -29,6 +30,7 @@ export default function VideoHero({ previewVideoSrc, vimeoId, posterSrc }: Video
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('Sorry, there was an error playing the video.');
+  const [showCustomCursor, setShowCustomCursor] = useState(false);
 
   // Start playing the preview video silently in the background
   useEffect(() => {
@@ -102,85 +104,105 @@ export default function VideoHero({ previewVideoSrc, vimeoId, posterSrc }: Video
     }, 100);
   };
 
-  return (
-    <section 
-      id="video-hero"
-      ref={ref}
-      className={`${isVisible ? 'visible' : ''}`}
-      style={{
-        padding: 0,
-        margin: 0,
-        width: '100%',
-        height: '80vh',
-        position: 'relative',
-        backgroundColor: 'var(--ink)',
-        color: 'var(--paper)',
-        overflow: 'hidden'
-      }}
-    >
-      {/* Preview video - always plays silently in the background */}
-      {!isPlaying && (
-        <video 
-          ref={previewVideoRef}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            opacity: 0.5,
-            transition: 'opacity var(--transition-medium)'
-          }}
-          poster={posterSrc}
-          preload="auto"
-          muted
-          playsInline
-          loop
-        >
-          <source src={previewVideoSrc} type="video/mp4" />
-        </video>
-      )}
+  // Mouse enter/leave handlers for cursor
+  const handleMouseEnter = () => {
+    setShowCustomCursor(true);
+  };
 
-      {/* Vimeo player - shown after clicking play */}
-      {isPlaying && (
-        <div 
-          style={{
-            padding: '56.25% 0 0 0',
-            position: 'relative',
-            width: '100%',
-            height: '100%'
-          }}
-        >
-          <iframe 
-            src={`https://player.vimeo.com/video/${vimeoId}?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1`}
-            frameBorder="0"
-            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+  const handleMouseLeave = () => {
+    setShowCustomCursor(false);
+  };
+
+  return (
+    <>
+      {/* Custom cursor that follows the mouse */}
+      <CustomCursor 
+        isVisible={showCustomCursor} 
+        onClick={handlePlayClick}
+      />
+      
+      <section 
+        id="video-hero"
+        ref={ref}
+        className={`${isVisible ? 'visible' : ''}`}
+        style={{
+          padding: 0,
+          margin: 0,
+          width: '100%',
+          height: '80vh',
+          position: 'relative',
+          backgroundColor: 'var(--ink)',
+          color: 'var(--paper)',
+          overflow: 'hidden',
+          cursor: showCustomCursor ? 'none' : 'auto' // Hide default cursor when custom cursor is visible
+        }}
+        data-custom-cursor={showCustomCursor ? "true" : "false"}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        {/* Preview video - always plays silently in the background */}
+        {!isPlaying && (
+          <video 
+            ref={previewVideoRef}
             style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              opacity: 1,
+              transition: 'opacity var(--transition-medium)'
+            }}
+            poster={posterSrc}
+            preload="auto"
+            muted
+            playsInline
+            loop
+          >
+            <source src={previewVideoSrc} type="video/mp4" />
+          </video>
+        )}
+
+        {/* Vimeo player - shown after clicking play */}
+        {isPlaying && (
+          <div 
+            style={{
+              padding: '56.25% 0 0 0',
+              position: 'relative',
               width: '100%',
               height: '100%'
             }}
-            title="Creador Ventures Video"
+          >
+            <iframe 
+              src={`https://player.vimeo.com/video/${vimeoId}?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1`}
+              frameBorder="0"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%'
+              }}
+              title="Creador Ventures Video"
+            />
+          </div>
+        )}
+
+        {/* Video overlay with play button - only show when not in playing state and custom cursor is not active */}
+        {!isPlaying && !showCustomCursor && (
+          <VideoOverlay 
+            isPlaying={isPlaying} 
+            onPlayClick={handlePlayClick} 
           />
-        </div>
-      )}
+        )}
 
-      {/* Video overlay with play button */}
-      {!isPlaying && (
-        <VideoOverlay 
-          isPlaying={isPlaying} 
-          isLoading={isLoading} 
-          onPlayClick={handlePlayClick} 
-        />
-      )}
-
-      {/* Error message */}
-      {hasError && (
-        <VideoError
-          onRetry={handleRetry}
-          message={errorMessage}
-        />
-      )}
-    </section>
+        {/* Error message */}
+        {hasError && (
+          <VideoError
+            onRetry={handleRetry}
+            message={errorMessage}
+          />
+        )}
+      </section>
+    </>
   );
 } 

@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Providers from "./providers";
+import GlobalCursorStyle from '@/components/GlobalCursorStyle';
 
 // Import Inter font from Google Fonts
 const inter = Inter({
@@ -37,6 +38,7 @@ export default function RootLayout({
       }}>
         {/* Wrap entire app with our Providers component */}
         <Providers>
+          <GlobalCursorStyle />
           {/* Neo-Brutalist minimal header with brand mark and navigation */}
           <header style={{
             position: "fixed",

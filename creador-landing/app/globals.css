@@ -911,3 +911,34 @@
     margin-bottom: var(--space-xl);
   }
 }
+
+/* Custom cursor styles */
+.cursor-none {
+  cursor: none !important;
+}
+
+/* Hide cursor on elements with custom cursor */
+[data-custom-cursor="true"] {
+  cursor: none !important;
+}
+
+/* Custom cursor animations */
+@keyframes cursorPulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.custom-cursor.visible {
+  animation: cursorPulse 2s infinite ease-in-out;
+}
+
+.custom-cursor.pressed {
+  animation: none;
+}

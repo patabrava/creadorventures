@@ -1,9 +1,10 @@
 # VideoHero Component
 
-A full-width video hero section with a play button overlay, designed following the neo-brutalist minimalist style guide.
+A full-width video hero section with interactive custom cursor, designed following the neo-brutalist minimalist style guide.
 
 ## Features
 
+- Interactive custom cursor that follows mouse movement
 - Click-to-play functionality with smooth transitions
 - Error handling with friendly user messages
 - Cross-browser compatibility with multiple video formats
@@ -20,7 +21,8 @@ import VideoHero from '@/components/VideoHero';
 
 // Basic usage
 <VideoHero 
-  videoSrc="/path/to/video.mp4" 
+  previewVideoSrc="/path/to/video.mp4" 
+  vimeoId="123456789"
   posterSrc="/path/to/poster.jpg" 
 />
 ```
@@ -31,8 +33,9 @@ The VideoHero component is composed of several sub-components:
 
 - **VideoHero**: Main container component
 - **VideoPlayer**: Handles video playback
-- **VideoOverlay**: Displays the "Play reel" text and play button
+- **VideoOverlay**: Invisible overlay for click interactions
 - **VideoError**: Shows error messages when video fails to load/play
+- **CustomCursor**: Provides the interactive cursor that follows mouse movement
 
 ## Props
 
@@ -40,7 +43,8 @@ The VideoHero component is composed of several sub-components:
 
 | Prop | Type | Required | Description |
 |------|------|----------|-------------|
-| videoSrc | string | Yes | Path to the video file (MP4 format) |
+| previewVideoSrc | string | Yes | Path to the preview video file (MP4 format) |
+| vimeoId | string | Yes | Vimeo video ID for the full video playback |
 | posterSrc | string | No | Path to the poster/thumbnail image |
 
 ## Browser Support
@@ -86,12 +90,19 @@ The component handles various error scenarios:
 
 The component tracks the following events:
 
-- `video_play_click`: User clicked the play button
+- `video_play_click`: User clicked to play the video
 - `video_playback_started`: Video successfully started playing
 - `video_playback_completed`: Video played to completion
 - `video_playback_error`: Error occurred during playback
 - `video_loading_error`: Error occurred while loading the video
 - `video_retry_attempt`: User clicked the retry button after an error
+
+## Interaction Design
+
+- Custom cursor replaces the standard cursor when hovering over the video
+- Cursor animates when clicked to provide visual feedback
+- Video plays at full opacity without filters for cleaner aesthetics
+- Clicking anywhere on the video area starts playback
 
 ## Performance Considerations
 
