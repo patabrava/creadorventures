@@ -104,10 +104,12 @@ export default function EventsArchive({
       }
     });
     
+    // Store refs for cleanup
+    const videoRefs = { ...previewVideosRef.current };
+    
     // Cleanup on unmount
     return () => {
-      sortedEvents.forEach(event => {
-        const videoElement = previewVideosRef.current[event.id];
+      Object.values(videoRefs).forEach(videoElement => {
         if (videoElement) {
           videoElement.pause();
         }

@@ -6,6 +6,12 @@
 // Keep track of worker initialization status
 let workersInitialized = false;
 
+// Define types for require objects
+interface RequireObject {
+  [key: string]: any;
+  (moduleId: string): any;
+}
+
 /**
  * Fix for vendor-chunks/lib/worker.js module not found error
  * This is a common issue in Next.js development mode
@@ -21,7 +27,7 @@ const fixMissingWorkerModule = () => {
     if (!originalRequire) return;
     
     // Store the original require function
-    const origRequireExt = (window as any).__original_require = originalRequire;
+    const origRequireExt = (window as any).__original_require = originalRequire as RequireObject;
     
     // Override the require function to catch the missing worker.js module
     (window as any).__webpack_require__ = function(moduleId: string) {
