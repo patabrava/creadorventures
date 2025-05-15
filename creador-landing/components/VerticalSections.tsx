@@ -3,6 +3,7 @@
 import { useAnimatedVisibility } from '@/hooks/useAnimatedVisibility';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface VerticalSectionProps {
   title: string;
@@ -32,6 +33,7 @@ export default function VerticalSections() {
   const { ref, isVisible } = useAnimatedVisibility<HTMLDivElement>();
   const [isMobile, setIsMobile] = useState(true);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const router = useRouter();
   
   // Check for window width on client side
   useEffect(() => {
@@ -92,6 +94,7 @@ export default function VerticalSections() {
             {verticalSections.map((section, index) => {
               const { ref, isVisible } = cardVisibility[index];
               const delay = index * 100; // staggered delay in ms
+              const isStartupSourcing = index === 0;
               
               return (
                 <div 
@@ -105,11 +108,12 @@ export default function VerticalSections() {
                     transition: 'transform var(--transition-fast)',
                     opacity: isVisible ? 1 : 0,
                     transitionDelay: `${delay}ms`,
-                    cursor: 'pointer',
+                    cursor: isStartupSourcing ? 'pointer' : 'default',
                     transform: hoveredCard === index ? 'translateY(-8px)' : isVisible ? 'translateY(0)' : 'translateY(20px)'
                   }}
                   onMouseEnter={() => setHoveredCard(index)}
                   onMouseLeave={() => setHoveredCard(null)}
+                  onClick={isStartupSourcing ? () => router.push('/events#past-events') : undefined}
                 >
                   {section.imagePath && (
                     <div style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
@@ -167,6 +171,7 @@ export default function VerticalSections() {
             {verticalSections.map((section, index) => {
               const { ref, isVisible } = cardVisibility[index];
               const delay = index * 100; // staggered delay in ms
+              const isStartupSourcing = index === 0;
               
               return (
                 <div 
@@ -182,10 +187,11 @@ export default function VerticalSections() {
                     opacity: isVisible ? 1 : 0,
                     transform: hoveredCard === index ? 'translateY(-8px)' : isVisible ? 'translateY(0)' : 'translateY(20px)',
                     transitionDelay: `${delay}ms`,
-                    cursor: 'pointer'
+                    cursor: isStartupSourcing ? 'pointer' : 'default'
                   }}
                   onMouseEnter={() => setHoveredCard(index)}
                   onMouseLeave={() => setHoveredCard(null)}
+                  onClick={isStartupSourcing ? () => router.push('/events#past-events') : undefined}
                 >
                   {section.imagePath && (
                     <div style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>

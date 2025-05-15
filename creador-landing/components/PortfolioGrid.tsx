@@ -30,9 +30,63 @@ export default function PortfolioGrid({ items }: PortfolioGridProps) {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
-  // Find The Hub in the sorted items, if it exists
-  const theHubItem = sortedItems.find(item => item.slug === 'the-hub');
-  const theHubUrl = theHubItem?.companyUrl || 'https://thehub.example.com';
+  // First row logos
+  const firstRowLogos = [
+    {
+      title: "Rivian",
+      logo: "/images/portfolio/rivian.svg",
+      url: "https://rivian.com"
+    },
+    {
+      title: "Rappi",
+      logo: "/images/portfolio/rappi.svg", 
+      url: "https://rappi.com"
+    },
+    {
+      title: "Moxion",
+      logo: "/images/portfolio/moxion.svg",
+      url: "https://moxion.com"
+    },
+    {
+      title: "Oura",
+      logo: "/images/portfolio/oura.svg",
+      url: "https://ouraring.com"
+    },
+    {
+      title: "ListAcross",
+      logo: "/images/portfolio/listacross.svg",
+      url: "https://listacross.com"
+    }
+  ];
+
+  // Second row logos
+  const secondRowLogos = [
+    {
+      title: "The Hub",
+      logo: "/images/portfolio/THE HUB LOGO .jpg",
+      url: sortedItems.find(item => item.slug === 'the-hub')?.companyUrl || 'https://thehub.example.com'
+    },
+    {
+      title: "Viio",
+      logo: "/images/portfolio/viio.svg",
+      url: "https://viio.com"
+    },
+    {
+      title: "Kanarys",
+      logo: "/images/portfolio/kanarys.svg",
+      url: "https://kanarys.com"
+    },
+    {
+      title: "Connect Homes",
+      logo: "/images/portfolio/connect-homes.svg",
+      url: "https://connect-homes.com"
+    },
+    {
+      title: "OV Loop",
+      logo: "/images/portfolio/ovloop.svg",
+      url: "https://ovloop.com"
+    }
+  ];
 
   return (
     <section 
@@ -40,93 +94,56 @@ export default function PortfolioGrid({ items }: PortfolioGridProps) {
       className={`py-20 px-6 bg-paper text-ink ${isVisible ? 'visible' : ''}`}
     >
       <div className="container mx-auto max-w-[1440px]">
-        <h2 className="text-center text-[clamp(56px,8vw,120px)] font-light leading-[1.05] mb-[var(--space-xxxl)]">
+        <h2 className="text-center text-[clamp(56px,8vw,120px)] font-light leading-[1.05] mb-96">
           We give start-ups an<br />unfair advantage
         </h2>
         
         {/* First row of logos */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-12 mb-20">
-          {/* Special placement for THE HUB logo using the jpg version */}
-          <div 
-            className="flex items-center justify-center cursor-pointer transition-transform hover:translate-y-[-8px]"
-            onClick={() => handlePortfolioClick('The Hub', theHubUrl)}
-          >
-            <div className="relative h-[60px] w-full">
+        <div className="mb-32 flex justify-between items-center">
+          {firstRowLogos.map((company, index) => (
+            <div 
+              key={`row1-${index}`}
+              className="cursor-pointer hover:translate-y-[-8px] transition-transform duration-300"
+              onClick={() => handlePortfolioClick(company.title, company.url)}
+            >
               <Image 
-                src="/images/portfolio/THE HUB LOGO .jpg"
-                alt="The Hub logo"
-                className="object-contain"
-                fill
+                src={company.logo}
+                alt={`${company.title} logo`}
+                width={120}
+                height={40}
+                style={{
+                  maxWidth: '120px',
+                  height: 'auto',
+                  objectFit: 'contain'
+                }}
                 priority={true}
-                sizes="(max-width: 768px) 50vw, 20vw"
               />
             </div>
-          </div>
-          
-          {/* Rest of the first row logos, excluding The Hub if it's in first 4 items */}
-          {sortedItems
-            .filter(item => item.slug !== 'the-hub')
-            .slice(0, 4)
-            .map((item) => (
-              <div 
-                key={item.slug}
-                className="flex items-center justify-center cursor-pointer transition-transform hover:translate-y-[-8px]"
-                onClick={() => handlePortfolioClick(item.title, item.companyUrl)}
-              >
-                <div className="relative h-[40px] w-full">
-                  <Image 
-                    src={item.logo}
-                    alt={`${item.title} logo`}
-                    className="object-contain"
-                    fill
-                    priority={item.featured}
-                    sizes="(max-width: 768px) 50vw, 20vw"
-                  />
-                </div>
-              </div>
-            ))}
+          ))}
         </div>
         
         {/* Second row of logos */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-12">
-          {/* Add viio logo as a special case */}
-          <div 
-            className="flex items-center justify-center cursor-pointer transition-transform hover:translate-y-[-8px]"
-            onClick={() => handlePortfolioClick('Viio', 'https://viio.com')}
-          >
-            <div className="relative h-[40px] w-full">
+        <div className="flex justify-between items-center">
+          {secondRowLogos.map((company, index) => (
+            <div 
+              key={`row2-${index}`}
+              className="cursor-pointer hover:translate-y-[-8px] transition-transform duration-300"
+              onClick={() => handlePortfolioClick(company.title, company.url)}
+            >
               <Image 
-                src="/images/portfolio/viio.svg"
-                alt="Viio logo"
-                className="object-contain"
-                fill
-                priority={false}
-                sizes="(max-width: 768px) 50vw, 20vw"
+                src={company.logo}
+                alt={`${company.title} logo`}
+                width={120}
+                height={40}
+                style={{
+                  maxWidth: '120px',
+                  height: 'auto',
+                  objectFit: 'contain'
+                }}
+                priority={index < 2}
               />
             </div>
-          </div>
-          
-          {sortedItems
-            .filter(item => item.slug !== 'the-hub')
-            .slice(4, 8) /* Reduced from 9 to 8 to make room for viio */
-            .map((item) => (
-              <div 
-                key={item.slug}
-                className="flex items-center justify-center cursor-pointer transition-transform hover:translate-y-[-8px]"
-                onClick={() => handlePortfolioClick(item.title, item.companyUrl)}
-              >
-                <div className="relative h-[40px] w-full">
-                  <Image 
-                    src={item.logo}
-                    alt={`${item.title} logo`}
-                    className="object-contain"
-                    fill
-                    priority={false}
-                    sizes="(max-width: 768px) 50vw, 20vw"
-                  />
-                </div>
-              </div>
-            ))}
+          ))}
         </div>
       </div>
     </section>

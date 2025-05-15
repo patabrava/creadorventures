@@ -38,10 +38,8 @@ export default function TeamGrid({
 }: TeamGridProps) {
   const { ref, isVisible } = useAnimatedVisibility();
   
-  // Sort team members alphabetically by name and limit to 4
-  const sortedMembers = [...members]
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .slice(0, 4); // Limit to 4 members
+  // Use members in their original order (sorted by ID)
+  const displayMembers = [...members];
   
   // Handle social link click
   const handleSocialClick = (member: TeamMember, platform: string) => {
@@ -50,18 +48,7 @@ export default function TeamGrid({
       platform: platform
     });
   };
-  
-  // Get social icon based on platform
-  const getSocialIcon = (platform: string): string => {
-    switch (platform) {
-      case 'twitter': return '↗';
-      case 'linkedin': return '↗';
-      case 'github': return '↗';
-      case 'email': return '✉';
-      default: return '↗';
-    }
-  };
-  
+      
   return (
     <section 
       ref={ref} 
@@ -172,7 +159,7 @@ export default function TeamGrid({
             }
           `}</style>
           
-          {sortedMembers.map((member) => (
+          {displayMembers.map((member) => (
             <div 
               key={member.id}
               className="team-card"
@@ -216,8 +203,7 @@ export default function TeamGrid({
                         style={{ color: darkMode ? 'var(--paper)' : 'var(--ink)' }}
                         onClick={() => handleSocialClick(member, link.platform)}
                       >
-                        <span style={{ marginRight: '0.25rem' }}>{getSocialIcon(link.platform)}</span>
-                        <span>{link.platform}</span>
+                        <span>→ {link.platform}</span>
                       </a>
                     ))}
                   </div>

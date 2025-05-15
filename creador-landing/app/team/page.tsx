@@ -2,12 +2,12 @@
 
 import TeamGrid, { TeamMember } from '@/components/TeamGrid';
 
-// Sample data for the TeamGrid component - limit to exactly 4 team members
+// Team members ordered by their member IDs
 const teamMembers: TeamMember[] = [
   {
     id: 'member1',
-    name: 'Jane Doe',
-    role: 'CEO & Founder',
+    name: 'Nicolas Weber',
+    role: 'General Partner',
     photo: 'https://picsum.photos/seed/jane/400/600',
     bio: 'Experienced entrepreneur with background in AI and venture capital.',
     socialLinks: [
@@ -17,18 +17,19 @@ const teamMembers: TeamMember[] = [
   },
   {
     id: 'member2',
-    name: 'John Smith',
-    role: 'CTO',
+    name: 'Till Rügge',
+    role: 'General Partner',
     photo: 'https://picsum.photos/seed/john/400/600',
+    bio: 'Former VC with expertise in fintech and marketplace startups.',
     socialLinks: [
-      { platform: 'github', url: 'https://github.com/' },
+      { platform: 'twitter', url: 'https://twitter.com/' },
       { platform: 'linkedin', url: 'https://linkedin.com/' },
     ],
   },
   {
     id: 'member3',
-    name: 'Maria Garcia',
-    role: 'Investment Partner',
+    name: 'Julian Ullrich',
+    role: 'General Partner',
     photo: 'https://picsum.photos/seed/maria/400/600',
     bio: 'Former VC with expertise in fintech and marketplace startups.',
     socialLinks: [
@@ -38,13 +39,14 @@ const teamMembers: TeamMember[] = [
   },
   {
     id: 'member4',
-    name: 'Sophia Kim',
+    name: 'Camilo Echeverri',
     role: 'Operations Manager',
     photo: 'https://picsum.photos/seed/sophia/400/600',
     bio: 'Operational expert with a background in scaling startups across LATAM.',
     socialLinks: [
+      { platform: 'twitter', url: 'https://linkedin.com/' },
       { platform: 'linkedin', url: 'https://linkedin.com/' },
-      { platform: 'email', url: 'mailto:sophia@creadorventures.com' },
+      { platform: 'github', url: 'mailto:sophia@creadorventures.com' },
     ],
   }
 ];
