@@ -274,21 +274,7 @@ export default function EventsArchive({
   const createGrid = () => {
     const grid = Array.from({ length: columns }, () => [] as EventItem[]);
     
-    // Insert sponsor card in first or second position for visibility
-    const sponsorCard: EventItem = {
-      id: 'sponsor-cta',
-      title: sponsorCTA.title,
-      date: '',
-      previewImage: '',
-      width: 1,
-      height: 1
-    };
-    
-    // Add sponsor card to middle column (or first if only one column)
-    const sponsorColumn = Math.min(1, columns - 1);
-    grid[sponsorColumn].push(sponsorCard);
-    
-    // Distribute remaining events across columns
+    // Distribute events across columns
     let columnIndex = 0;
     sortedEvents.forEach(event => {
       grid[columnIndex].push(event);
@@ -310,9 +296,9 @@ export default function EventsArchive({
   };
   
   return (
-    <section 
+          <section 
       ref={sectionRef} 
-      className="pt-6 pb-24 px-6 bg-ink text-paper"
+      className="pt-6 pb-32 px-6 bg-ink text-paper"
       id="past-events"
       style={{
         opacity: 1,
@@ -345,85 +331,56 @@ export default function EventsArchive({
         </div>
         
         {/* Event Gallery */}
-        <div 
-          ref={galleryRef} 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12"
-          style={visibleStyle}
-        >
-          {eventGrid.flat().map(item => 
-            item.id === 'sponsor-cta' ? (
-              // Sponsor CTA Card
+                  <div 
+            ref={galleryRef} 
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16 md:gap-x-12 md:gap-y-20"
+            style={visibleStyle}
+          >
+          {eventGrid.flat().map(item => (
+            // Event Card
+            <div 
+              key={item.id}
+              className="group relative flex flex-col overflow-hidden transition-all duration-500 hover:translate-y-[-8px] hover:shadow-lg border-b-2 border-paper"
+              style={{ 
+                ...visibleStyle,
+                cursor: showCustomCursors[item.id] ? 'none' : 'pointer',
+                borderColor: 'var(--paper)',
+                marginBottom: '2.5rem', // Approximately 1cm
+                paddingBottom: '2.5rem'  // Additional padding before border
+              }}
+              onMouseEnter={() => (item.videoUrl || item.vimeoId) ? handleMouseEnter(item.id) : null}
+              onMouseLeave={() => (item.videoUrl || item.vimeoId) ? handleMouseLeave(item.id) : null}
+              onClick={() => (item.videoUrl || item.vimeoId) && !showCustomCursors[item.id] ? handlePlayClick(item) : null}
+            >
+              {/* Custom cursor that follows the mouse */}
+              {(item.videoUrl || item.vimeoId) && (
+                <CustomCursor 
+                  isVisible={showCustomCursors[item.id] || false} 
+                  onClick={() => handlePlayClick(item)}
+                />
+              )}
+              
+              {/* Event Media Preview */}
               <div 
-                key="sponsor-cta"
-                className="relative bg-ink text-paper p-12 cursor-pointer transition-transform hover:translate-y-[-8px] hover:shadow-lg"
-                onClick={handleCTAClick}
+                className="aspect-[16/9] relative overflow-hidden bg-ink"
                 style={{ 
-                  ...visibleStyle
+                  ...visibleStyle, 
+                  backgroundColor: 'var(--ink)'
                 }}
               >
-                <h3 
-                  className="text-[32px] font-light mb-6 text-paper"
-                  style={{ ...visibleStyle, color: 'var(--paper)' }}
-                >
-                  {sponsorCTA.title}
-                </h3>
-                <p 
-                  className="text-[18px] mb-8 text-paper"
-                  style={{ ...visibleStyle, color: 'var(--paper)' }}
-                >
-                  {sponsorCTA.description}
-                </p>
-                <button 
-                  className="bg-paper text-ink px-8 py-3 rounded-full inline-flex items-center"
-                  style={{ 
-                    ...visibleStyle, 
-                    backgroundColor: 'var(--paper)', 
-                    color: 'var(--ink)' 
-                  }}
-                >
-                  <span 
-                    className="mr-2"
-                    style={{ color: 'var(--ink)' }}
-                  >→</span>
-                  Book a call
-                </button>
-              </div>
-            ) : (
-              // Event Card
-              <div 
-                key={item.id}
-                className="group relative flex flex-col overflow-hidden transition-all duration-500 hover:translate-y-[-8px] hover:shadow-lg"
-                style={{ 
-                  ...visibleStyle,
-                  cursor: showCustomCursors[item.id] ? 'none' : 'pointer'
-                }}
-                onMouseEnter={() => (item.videoUrl || item.vimeoId) ? handleMouseEnter(item.id) : null}
-                onMouseLeave={() => (item.videoUrl || item.vimeoId) ? handleMouseLeave(item.id) : null}
-                onClick={() => (item.videoUrl || item.vimeoId) && !showCustomCursors[item.id] ? handlePlayClick(item) : null}
-              >
-                {/* Custom cursor that follows the mouse */}
-                {(item.videoUrl || item.vimeoId) && (
-                  <CustomCursor 
-                    isVisible={showCustomCursors[item.id] || false} 
-                    onClick={() => handlePlayClick(item)}
-                  />
-                )}
-                
-                {/* Event Media Preview */}
-                <div 
-                  className="aspect-[16/9] relative overflow-hidden bg-ink"
-                  style={{ ...visibleStyle, backgroundColor: 'var(--ink)' }}
-                >
-                  {/* Preview Video - silent autoplay when available */}
+                                  {/* Preview Video - silent autoplay when available */}
                   {(item.videoUrl || item.vimeoId) && item.previewVideoSrc ? (
+                  <div className="flex justify-center items-center h-full w-full" style={{ position: 'absolute', inset: 0 }}>
                     <video 
                       ref={(el) => {
                         previewVideosRef.current[item.id] = el;
                       }}
                       style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
+                        width: item.width > item.height ? '100%' : 'auto',
+                        height: item.width > item.height ? 'auto' : '100%',
+                        maxHeight: '100%',
+                        maxWidth: '100%',
+                        objectFit: 'contain',
                         opacity: 1,
                         transition: 'opacity var(--transition-medium)'
                       }}
@@ -435,63 +392,73 @@ export default function EventsArchive({
                     >
                       <source src={item.previewVideoSrc} type="video/mp4" />
                     </video>
-                  ) : (
-                    <Image 
-                      src={item.previewImage}
-                      alt={`${item.title} preview`}
-                      className="object-cover w-full h-full"
-                      style={visibleStyle}
-                      fill
-                      sizes={`(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw`}
-                      priority={false}
-                    />
-                  )}
-                  
-                  {/* Play button overlay - only show when custom cursor is not active */}
-                  {(item.videoUrl || item.vimeoId) && !showCustomCursors[item.id] && (
+                  </div>
+                                  ) : (
+                    <div className="flex justify-center items-center h-full w-full" style={{ position: 'absolute', inset: 0 }}>
+                      <Image 
+                        src={item.previewImage}
+                        alt={`${item.title} preview`}
+                        className="object-contain"
+                        style={{
+                          ...visibleStyle,
+                          width: item.width > item.height ? '100%' : 'auto',
+                          height: item.width > item.height ? 'auto' : '100%',
+                          maxHeight: '100%',
+                          maxWidth: '100%'
+                        }}
+                        fill={false}
+                        width={800}
+                        height={450}
+                        sizes={`(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw`}
+                        priority={false}
+                      />
+                    </div>
+                )}
+                
+                {/* Play button overlay - only show when custom cursor is not active */}
+                {(item.videoUrl || item.vimeoId) && !showCustomCursors[item.id] && (
+                  <div 
+                    className="absolute inset-0 flex items-center justify-center bg-ink bg-opacity-40"
+                    style={{
+                      ...visibleStyle,
+                      backgroundColor: 'var(--ink)',
+                      opacity: 0.4
+                    }}
+                  >
                     <div 
-                      className="absolute inset-0 flex items-center justify-center bg-ink bg-opacity-40"
-                      style={{
+                      className="w-16 h-16 border border-paper rounded-full flex items-center justify-center bg-ink bg-opacity-70"
+                      style={{ 
                         ...visibleStyle,
+                        borderColor: 'var(--paper)',
                         backgroundColor: 'var(--ink)',
-                        opacity: 0.4
+                        opacity: 0.7
                       }}
                     >
-                      <div 
-                        className="w-16 h-16 border border-paper rounded-full flex items-center justify-center bg-ink bg-opacity-70"
-                        style={{ 
-                          ...visibleStyle,
-                          borderColor: 'var(--paper)',
-                          backgroundColor: 'var(--ink)',
-                          opacity: 0.7
-                        }}
-                      >
-                        <span 
-                          className="text-paper text-xl"
-                          style={{ ...visibleStyle, color: 'var(--paper)' }}
-                        >▶</span>
-                      </div>
+                      <span 
+                        className="text-paper text-xl"
+                        style={{ ...visibleStyle, color: 'var(--paper)' }}
+                      >▶</span>
                     </div>
-                  )}
-                </div>
-                
-                {/* Event Info */}
-                <div 
-                  className="p-8 bg-ink flex-grow"
-                  style={{ ...visibleStyle, backgroundColor: 'var(--ink)' }}
-                >
-                  <div 
-                    className="text-graphite-40 text-[16px] mb-2"
-                    style={visibleStyle}
-                  >{item.date}</div>
-                  <h3 
-                    className="text-[28px] font-light mb-0 text-paper" 
-                    style={{ ...visibleStyle, color: 'var(--paper)' }}
-                  >{item.title}</h3>
-                </div>
+                  </div>
+                )}
               </div>
-            )
-          )}  
+              
+              {/* Event Info */}
+              <div 
+                className="p-8 bg-ink flex-grow"
+                style={{ ...visibleStyle, backgroundColor: 'var(--ink)' }}
+              >
+                <div 
+                  className="text-graphite-40 text-[16px] mb-2"
+                  style={visibleStyle}
+                >{item.date}</div>
+                <h3 
+                  className="text-[28px] font-light mb-0 text-paper" 
+                  style={{ ...visibleStyle, color: 'var(--paper)' }}
+                >{item.title}</h3>
+              </div>
+            </div>
+          ))}  
         </div>
       </div>
       

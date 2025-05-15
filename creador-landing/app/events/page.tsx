@@ -4,6 +4,7 @@ import { useState } from 'react';
 import EventsArchive, { EventItem } from '@/components/EventsArchive';
 import CalendlyModal from '@/components/CalendlyModal';
 import Link from 'next/link';
+import CtaButton from '@/components/CtaButton';
 
 // Sample data for the EventsArchive component
 const sampleEvents: EventItem[] = [
@@ -18,44 +19,24 @@ const sampleEvents: EventItem[] = [
     height: 9,
   },
   {
-    id: 'event-2',
-    title: 'Startup Funding Workshop',
+    id: 'metapartyhub-bogota',
+    title: 'MetaPartyHub Bogota',
     date: 'October 20, 2023',
-    previewImage: 'https://picsum.photos/seed/event2/800/450',
-    previewVideoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-    videoUrl: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4',
-    width: 16,
-    height: 9,
+    previewImage: 'https://picsum.photos/seed/metapartyhub/800/450',
+    previewVideoSrc: '/videos/kaputtcompressed.mp4',
+    vimeoId: '1084461559',
+    width: 9,
+    height: 16,
   },
   {
-    id: 'event-3',
-    title: 'Tech Talent Meetup',
-    date: 'September 5, 2023',
-    previewImage: 'https://picsum.photos/seed/event3/800/450',
-    previewVideoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
-    videoUrl: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4',
-    width: 4,
-    height: 3,
-  },
-  {
-    id: 'event-4',
-    title: 'Venture Capital Panel',
+    id: 'grit-ba',
+    title: 'Grit Buenos Aires',
     date: 'August 12, 2023',
-    previewImage: 'https://picsum.photos/seed/event4/800/450',
-    previewVideoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
-    videoUrl: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4',
-    width: 16,
-    height: 9,
-  },
-  {
-    id: 'event-5',
-    title: 'Blockchain Innovation Forum',
-    date: 'July 28, 2023',
-    previewImage: 'https://picsum.photos/seed/event5/800/450',
-    previewVideoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
-    videoUrl: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4',
-    width: 3,
-    height: 4,
+    previewImage: 'https://picsum.photos/seed/gritba/800/450',
+    previewVideoSrc: '/videos/grit ba compressed .mp4',
+    vimeoId: '1084461541',
+    width: 9,
+    height: 16,
   },
 ];
 
@@ -127,13 +108,14 @@ export default function EventsPage() {
     >
       {/* Hero Section */}
       <section 
-        className="py-12 pb-6 px-6 relative overflow-hidden bg-ink text-paper"
+        className="min-h-screen py-24 px-6 relative overflow-visible bg-ink text-paper flex flex-col justify-center"
         style={{ 
           opacity: 1,
           transform: 'none',
           visibility: 'visible',
           backgroundColor: 'var(--ink)',
-          color: 'var(--paper)'
+          color: 'var(--paper)',
+          paddingBottom: '8rem'
         }}
       >
         <div 
@@ -141,7 +123,7 @@ export default function EventsPage() {
           style={{ opacity: 1 }}
         >
           <h1 
-            className="font-light text-[clamp(56px,8vw,120px)] leading-[1.05] mb-8 max-w-[900px]"
+            className="font-light text-[clamp(56px,8vw,120px)] leading-[1.05] mb-16 max-w-[900px]"
             style={{ 
               opacity: 1,
               color: 'var(--paper)',
@@ -151,7 +133,7 @@ export default function EventsPage() {
             Events that <br />challenge conventions
           </h1>
           <p 
-            className="text-[18px] leading-[28px] mb-12 max-w-[600px] text-paper"
+            className="text-[18px] leading-[28px] mb-24 max-w-[600px] text-paper"
             style={{ opacity: 1, color: 'var(--paper)' }}
           >
             Join our community of founders, investors, and industry experts as we explore 
@@ -160,8 +142,12 @@ export default function EventsPage() {
           
           {/* Event Stats */}
           <div 
-            className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-8 max-w-[900px]"
-            style={{ opacity: 1 }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 max-w-[900px]"
+            style={{ 
+              opacity: 1,
+              position: 'relative',
+              zIndex: 10
+            }}
           >
             <div>
               <div 
@@ -204,16 +190,17 @@ export default function EventsPage() {
         onOpenCalendly={handleOpenCalendly}
       />
       
-      {/* Newsletter Section */}
+      {/* Sponsor Section */}
       <section 
-        className="py-24 px-6 bg-ink text-paper border-t border-b border-paper"
+        className="pt-8 px-6 bg-ink text-paper"
         style={{ 
           opacity: 1,
           transform: 'none',
           visibility: 'visible',
           backgroundColor: 'var(--ink)',
           color: 'var(--paper)',
-          borderColor: 'var(--paper)'
+          marginBottom: 0,
+          paddingBottom: '4rem'
         }}
       >
         <div 
@@ -229,44 +216,23 @@ export default function EventsPage() {
                 className="text-[48px] font-light leading-tight mb-8 text-paper"
                 style={{ opacity: 1, color: 'var(--paper)' }}
               >
-                Stay informed about <br />upcoming events
+                {sponsorCTA.title}
               </h2>
               <p 
                 className="text-[18px] leading-[28px] mb-8 text-paper"
                 style={{ opacity: 1, color: 'var(--paper)' }}
               >
-                Subscribe to our newsletter to receive invitations to exclusive events and updates on our programs.
+                {sponsorCTA.description}
               </p>
             </div>
-            <div style={{ opacity: 1 }}>
-              <form className="flex flex-col" style={{ opacity: 1 }}>
-                <div className="mb-8" style={{ opacity: 1 }}>
-                  <input 
-                    type="email" 
-                    placeholder="Your email address" 
-                    className="underline-input w-full bg-transparent border-b border-paper p-4 text-[18px] text-paper"
-                    required
-                    style={{ 
-                      opacity: 1, 
-                      borderColor: 'var(--paper)', 
-                      color: 'var(--paper)',
-                      backgroundColor: 'transparent'
-                    }}
-                  />
-                </div>
-                <button 
-                  type="submit" 
-                  className="self-start bg-paper text-ink rounded-full px-8 py-2 inline-flex items-center transition-transform hover:translate-y-[-2px] hover:shadow-lg"
-                  style={{ 
-                    opacity: 1, 
-                    backgroundColor: 'var(--paper)', 
-                    color: 'var(--ink)' 
-                  }}
-                >
-                  <span className="mr-2">→</span>
-                  Subscribe
-                </button>
-              </form>
+            <div style={{ opacity: 1 }} className="flex items-center justify-center">
+              <CtaButton
+                onClick={() => handleOpenCalendly(sponsorCTA.title, sponsorCTA.calendlyUrl, sponsorCTA.fallbackEmail)}
+                variant="dark"
+                size="large"
+              >
+                Schedule a Call
+              </CtaButton>
             </div>
           </div>
         </div>
