@@ -38,10 +38,10 @@ export default function TeamGrid({
 }: TeamGridProps) {
   const { ref, isVisible } = useAnimatedVisibility();
   
-  // Sort team members alphabetically by name
-  const sortedMembers = [...members].sort((a, b) => 
-    a.name.localeCompare(b.name)
-  );
+  // Sort team members alphabetically by name and limit to 4
+  const sortedMembers = [...members]
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .slice(0, 4); // Limit to 4 members
   
   // Handle social link click
   const handleSocialClick = (member: TeamMember, platform: string) => {
@@ -65,12 +65,13 @@ export default function TeamGrid({
   return (
     <section 
       ref={ref} 
-      className={`py-20 px-6 ${darkMode ? 'bg-ink text-paper' : 'bg-paper text-ink'}`}
+      className={`pt-20 px-6 ${darkMode ? 'bg-ink text-paper' : 'bg-paper text-ink'}`}
       style={{ 
         opacity: 1,
         transform: isVisible ? 'none' : 'translateY(40px)',
         transition: 'opacity 0.6s ease, transform 0.6s ease',
-        visibility: 'visible'
+        visibility: 'visible',
+        paddingBottom: 0
       }}
     >
       <div className="container mx-auto max-w-[1440px]">
@@ -93,13 +94,15 @@ export default function TeamGrid({
         )}
 
         {/* Team members grid */}
-        <div className="team-grid" style={{ marginBottom: '4rem' }}>
+        <div className="team-grid">
           <style jsx>{`
             .team-grid {
               display: grid;
               grid-template-columns: repeat(1, 1fr);
               gap: 2rem;
               width: 100%;
+              padding-bottom: 0;
+              margin-bottom: 0;
             }
             
             @media (min-width: 640px) {
@@ -118,6 +121,7 @@ export default function TeamGrid({
               border: 2px solid;
               transition: transform 0.3s ease;
               overflow: hidden;
+              margin-bottom: 0;
             }
             
             .team-card:hover {
@@ -183,7 +187,7 @@ export default function TeamGrid({
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 960px) 50vw, 25vw"
                   style={{ objectFit: 'cover' }}
-                  priority={sortedMembers.indexOf(member) < 4} // Only prioritize first 4 members
+                  priority={true} // Prioritize loading all 4 members
                 />
               </div>
               

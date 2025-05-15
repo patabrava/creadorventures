@@ -2,7 +2,7 @@
 
 import TeamGrid, { TeamMember } from '@/components/TeamGrid';
 
-// Sample data for the TeamGrid component
+// Sample data for the TeamGrid component - limit to exactly 4 team members
 const teamMembers: TeamMember[] = [
   {
     id: 'member1',
@@ -27,16 +27,6 @@ const teamMembers: TeamMember[] = [
   },
   {
     id: 'member3',
-    name: 'Alex Johnson',
-    role: 'Design Lead',
-    photo: 'https://picsum.photos/seed/alex/400/600',
-    bio: 'Award-winning designer focused on user experience and digital products.',
-    socialLinks: [
-      { platform: 'email', url: 'mailto:alex@creadorventures.com' },
-    ],
-  },
-  {
-    id: 'member4',
     name: 'Maria Garcia',
     role: 'Investment Partner',
     photo: 'https://picsum.photos/seed/maria/400/600',
@@ -47,16 +37,7 @@ const teamMembers: TeamMember[] = [
     ],
   },
   {
-    id: 'member5',
-    name: 'David Lee',
-    role: 'Lead Developer',
-    photo: 'https://picsum.photos/seed/david/400/600',
-    socialLinks: [
-      { platform: 'github', url: 'https://github.com/' },
-    ],
-  },
-  {
-    id: 'member6',
+    id: 'member4',
     name: 'Sophia Kim',
     role: 'Operations Manager',
     photo: 'https://picsum.photos/seed/sophia/400/600',
@@ -65,30 +46,7 @@ const teamMembers: TeamMember[] = [
       { platform: 'linkedin', url: 'https://linkedin.com/' },
       { platform: 'email', url: 'mailto:sophia@creadorventures.com' },
     ],
-  },
-  {
-    id: 'member7',
-    name: 'Carlos Rodriguez',
-    role: 'Marketing Director',
-    photo: 'https://picsum.photos/seed/carlos/400/600',
-    bio: 'Digital marketing expert with focus on growth strategies for startups.',
-    socialLinks: [
-      { platform: 'twitter', url: 'https://twitter.com/' },
-      { platform: 'linkedin', url: 'https://linkedin.com/' },
-    ],
-  },
-  {
-    id: 'member8',
-    name: 'Elena Torres',
-    role: 'Venture Partner',
-    photo: 'https://picsum.photos/seed/elena/400/600',
-    bio: 'Seasoned investor with expertise in emerging markets and fintech.',
-    socialLinks: [
-      { platform: 'twitter', url: 'https://twitter.com/' },
-      { platform: 'linkedin', url: 'https://linkedin.com/' },
-      { platform: 'email', url: 'mailto:elena@creadorventures.com' },
-    ],
-  },
+  }
 ];
 
 // Common style for full visibility with black background and white text
@@ -104,7 +62,13 @@ export default function TeamPage() {
   return (
     <main 
       className="min-h-screen bg-ink text-paper" 
-      style={visibleStyle}
+      style={{
+        ...visibleStyle,
+        display: 'flex',
+        flexDirection: 'column',
+        paddingBottom: 0,
+        marginBottom: 0
+      }}
     >
       {/* Hero Section */}
       <section 
