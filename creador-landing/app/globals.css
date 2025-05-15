@@ -15,6 +15,8 @@
   /* Color Palette */
   --ink: #000000;
   --paper: #FFFFFF;
+  --primary: #ff6b00; /* Orange primary color */
+  --primary-dark: #e06000; /* Darker shade for hover states */
   --graphite-60: #666666;
   --graphite-40: #999999;
   --accent-lime: #00FF55;

@@ -65,58 +65,154 @@ export default function TeamGrid({
   return (
     <section 
       ref={ref} 
-      className={`py-20 px-6 ${darkMode ? 'bg-ink text-paper' : 'bg-paper text-ink'} ${isVisible ? 'visible' : ''}`}
+      className={`py-20 px-6 ${darkMode ? 'bg-ink text-paper' : 'bg-paper text-ink'}`}
+      style={{ 
+        opacity: 1,
+        transform: isVisible ? 'none' : 'translateY(40px)',
+        transition: 'opacity 0.6s ease, transform 0.6s ease',
+        visibility: 'visible'
+      }}
     >
       <div className="container mx-auto max-w-[1440px]">
         {title && (
-          <h2 className="text-[48px] font-light leading-tight mb-8">{title}</h2>
+          <h2 
+            className="text-[48px] font-light leading-tight mb-8"
+            style={{ opacity: 1 }}
+          >
+            {title}
+          </h2>
         )}
         
         {description && (
-          <p className="text-[18px] leading-[28px] mb-16 max-w-[800px]">
+          <p 
+            className="text-[18px] leading-[28px] mb-16 max-w-[800px]"
+            style={{ opacity: 1 }}
+          >
             {description}
           </p>
         )}
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-12">
+
+        {/* Team members grid */}
+        <div className="team-grid" style={{ marginBottom: '4rem' }}>
+          <style jsx>{`
+            .team-grid {
+              display: grid;
+              grid-template-columns: repeat(1, 1fr);
+              gap: 2rem;
+              width: 100%;
+            }
+            
+            @media (min-width: 640px) {
+              .team-grid {
+                grid-template-columns: repeat(2, 1fr);
+              }
+            }
+            
+            @media (min-width: 960px) {
+              .team-grid {
+                grid-template-columns: repeat(4, 1fr);
+              }
+            }
+            
+            .team-card {
+              border: 2px solid;
+              transition: transform 0.3s ease;
+              overflow: hidden;
+            }
+            
+            .team-card:hover {
+              transform: translateY(-8px);
+            }
+            
+            .photo-container {
+              position: relative;
+              width: 100%;
+              padding-bottom: 150%; /* 2:3 aspect ratio */
+            }
+            
+            .member-info {
+              padding: 1.5rem;
+            }
+            
+            .member-name {
+              font-size: 28px;
+              font-weight: 300;
+              line-height: 1.15;
+              margin-bottom: 0.5rem;
+            }
+            
+            .member-role {
+              margin-bottom: 1rem;
+            }
+            
+            .member-bio {
+              font-size: 16px;
+              line-height: 1.5;
+              margin-bottom: 1.5rem;
+            }
+            
+            .social-links {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 1rem;
+            }
+            
+            .social-link {
+              display: flex;
+              align-items: center;
+              transition: transform 0.2s ease;
+            }
+            
+            .social-link:hover {
+              transform: translateX(4px);
+            }
+          `}</style>
+          
           {sortedMembers.map((member) => (
             <div 
               key={member.id}
-              className={`team-card relative transition-transform hover:translate-y-[-8px] ${darkMode ? 'border-2 border-paper' : 'border-2 border-ink'}`}
+              className="team-card"
+              style={{ 
+                borderColor: darkMode ? 'var(--paper)' : 'var(--ink)'
+              }}
             >
-              {/* Photo */}
-              <div className="aspect-square relative overflow-hidden">
+              <div className="photo-container">
                 <Image 
                   src={member.photo}
                   alt={`${member.name} photo`}
-                  className="object-cover"
                   fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  sizes="(max-width: 640px) 100vw, (max-width: 960px) 50vw, 25vw"
+                  style={{ objectFit: 'cover' }}
+                  priority={sortedMembers.indexOf(member) < 4} // Only prioritize first 4 members
                 />
               </div>
               
-              {/* Content */}
-              <div className="p-6">
-                <h3 className="text-[28px] font-light mb-2">{member.name}</h3>
-                <p className="text-graphite-60 mb-4">{member.role}</p>
+              <div className="member-info">
+                <h3 className="member-name">{member.name}</h3>
+                <p 
+                  className="member-role"
+                  style={{ color: 'var(--graphite-40)' }}
+                >
+                  {member.role}
+                </p>
                 
                 {member.bio && (
-                  <p className="mb-6 text-[16px] leading-[1.5]">{member.bio}</p>
+                  <p className="member-bio">{member.bio}</p>
                 )}
                 
-                {/* Social Links */}
                 {member.socialLinks && member.socialLinks.length > 0 && (
-                  <div className="flex flex-wrap gap-4">
+                  <div className="social-links">
                     {member.socialLinks.map((link) => (
                       <a
                         key={`${member.id}-${link.platform}`}
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`flex items-center ${darkMode ? 'text-paper hover:text-graphite-40' : 'text-ink hover:text-graphite-60'} transition-colors`}
+                        className="social-link"
+                        style={{ color: darkMode ? 'var(--paper)' : 'var(--ink)' }}
                         onClick={() => handleSocialClick(member, link.platform)}
                       >
-                        <span className="mr-1">{getSocialIcon(link.platform)}</span>
+                        <span style={{ marginRight: '0.25rem' }}>{getSocialIcon(link.platform)}</span>
                         <span>{link.platform}</span>
                       </a>
                     ))}
