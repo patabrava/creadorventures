@@ -9,6 +9,7 @@ export type GA4EventType =
   | 'report_download'
   | 'event_video_open'
   | 'event_video_error'
+  | 'event_video_opened'
   | 'team_social_click';
 
 // Define function type for gtag

@@ -89,9 +89,26 @@ export default function PortfolioGrid({ items }: PortfolioGridProps) {
         
         {/* Second row of logos */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-12">
+          {/* Add viio logo as a special case */}
+          <div 
+            className="flex items-center justify-center cursor-pointer transition-transform hover:translate-y-[-8px]"
+            onClick={() => handlePortfolioClick('Viio', 'https://viio.com')}
+          >
+            <div className="relative h-[40px] w-full">
+              <Image 
+                src="/images/portfolio/viio.svg"
+                alt="Viio logo"
+                className="object-contain"
+                fill
+                priority={false}
+                sizes="(max-width: 768px) 50vw, 20vw"
+              />
+            </div>
+          </div>
+          
           {sortedItems
             .filter(item => item.slug !== 'the-hub')
-            .slice(4, 9)
+            .slice(4, 8) /* Reduced from 9 to 8 to make room for viio */
             .map((item) => (
               <div 
                 key={item.slug}
