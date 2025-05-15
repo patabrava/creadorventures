@@ -30,37 +30,8 @@ export default function PortfolioGrid({ items }: PortfolioGridProps) {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
-  // First row logos
-  const firstRowLogos = [
-    {
-      title: "Rivian",
-      logo: "/images/portfolio/rivian.svg",
-      url: "https://rivian.com"
-    },
-    {
-      title: "Rappi",
-      logo: "/images/portfolio/rappi.svg", 
-      url: "https://rappi.com"
-    },
-    {
-      title: "Moxion",
-      logo: "/images/portfolio/moxion.svg",
-      url: "https://moxion.com"
-    },
-    {
-      title: "Oura",
-      logo: "/images/portfolio/oura.svg",
-      url: "https://ouraring.com"
-    },
-    {
-      title: "ListAcross",
-      logo: "/images/portfolio/listacross.svg",
-      url: "https://listacross.com"
-    }
-  ];
-
-  // Second row logos
-  const secondRowLogos = [
+  // Second row logos - now the only row
+  const logosToDisplay = [
     {
       title: "The Hub",
       logo: "/images/portfolio/THE HUB LOGO .jpg",
@@ -70,21 +41,6 @@ export default function PortfolioGrid({ items }: PortfolioGridProps) {
       title: "Viio",
       logo: "/images/portfolio/viio.svg",
       url: "https://viio.com"
-    },
-    {
-      title: "Kanarys",
-      logo: "/images/portfolio/kanarys.svg",
-      url: "https://kanarys.com"
-    },
-    {
-      title: "Connect Homes",
-      logo: "/images/portfolio/connect-homes.svg",
-      url: "https://connect-homes.com"
-    },
-    {
-      title: "OV Loop",
-      logo: "/images/portfolio/ovloop.svg",
-      url: "https://ovloop.com"
     }
   ];
 
@@ -94,54 +50,36 @@ export default function PortfolioGrid({ items }: PortfolioGridProps) {
       className={`py-20 px-6 bg-paper text-ink ${isVisible ? 'visible' : ''}`}
     >
       <div className="container mx-auto max-w-[1440px]">
-        <h2 className="text-center text-[clamp(56px,8vw,120px)] font-light leading-[1.05] mb-96">
+        <h2 className="text-center text-[clamp(56px,8vw,120px)] font-light leading-[1.05] mb-48">
           We give start-ups an<br />unfair advantage
         </h2>
         
-        {/* First row of logos */}
-        <div className="mb-32 flex justify-between items-center">
-          {firstRowLogos.map((company, index) => (
+        {/* Portfolio Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 lg:gap-32 max-w-4xl mx-auto">
+          {logosToDisplay.map((company, index) => (
             <div 
-              key={`row1-${index}`}
-              className="cursor-pointer hover:translate-y-[-8px] transition-transform duration-300"
+              key={`logo-${index}`}
+              className="relative group cursor-pointer"
               onClick={() => handlePortfolioClick(company.title, company.url)}
             >
-              <Image 
-                src={company.logo}
-                alt={`${company.title} logo`}
-                width={120}
-                height={40}
-                style={{
-                  maxWidth: '120px',
-                  height: 'auto',
-                  objectFit: 'contain'
-                }}
-                priority={true}
-              />
-            </div>
-          ))}
-        </div>
-        
-        {/* Second row of logos */}
-        <div className="flex justify-between items-center">
-          {secondRowLogos.map((company, index) => (
-            <div 
-              key={`row2-${index}`}
-              className="cursor-pointer hover:translate-y-[-8px] transition-transform duration-300"
-              onClick={() => handlePortfolioClick(company.title, company.url)}
-            >
-              <Image 
-                src={company.logo}
-                alt={`${company.title} logo`}
-                width={120}
-                height={40}
-                style={{
-                  maxWidth: '120px',
-                  height: 'auto',
-                  objectFit: 'contain'
-                }}
-                priority={index < 2}
-              />
+              <div className="aspect-[3/2] flex items-center justify-center p-8 bg-white/5 rounded-2xl transition-all duration-300 hover:bg-white/10 hover:shadow-xl max-w-[400px] mx-auto w-full">
+                <div className="relative w-full h-full max-w-[280px] max-h-[120px] flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+                  <Image 
+                    src={company.logo}
+                    alt={`${company.title} logo`}
+                    fill
+                    style={{
+                      objectFit: 'contain',
+                      padding: '8%'
+                    }}
+                    className="transition-opacity duration-300"
+                    priority={index < 2}
+                  />
+                </div>
+              </div>
+              <div className="absolute -bottom-8 left-0 right-0 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span className="text-sm font-medium">{company.title}</span>
+              </div>
             </div>
           ))}
         </div>

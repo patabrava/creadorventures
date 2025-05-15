@@ -36,8 +36,8 @@ export default function Hero({ headline, subheadline }: HeroProps) {
         backgroundColor: 'var(--ink)',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
-        paddingTop: '80px'
+        paddingTop: '80px',
+        paddingBottom: '40px'
       }}>
         {/* Background would be a video in production version */}
         
@@ -45,7 +45,12 @@ export default function Hero({ headline, subheadline }: HeroProps) {
           width: '100%',
           paddingLeft: 'var(--space-lg)',
           paddingRight: 'var(--space-lg)',
-          zIndex: 1
+          paddingBottom: '120px',
+          zIndex: 1,
+          flex: '1',
+          display: 'flex',
+          alignItems: 'center',
+          minHeight: '0'
         }}>
           <div className="container">
             <h1 style={{
@@ -73,12 +78,13 @@ export default function Hero({ headline, subheadline }: HeroProps) {
         
         {/* Scroll anchor with ghost circle button as in style guide */}
         <div style={{
+          width: '100%',
+          textAlign: 'center',
+          zIndex: 2,
           position: 'absolute',
           bottom: '40px',
           left: '50%',
-          transform: 'translateX(-50%)',
-          textAlign: 'center',
-          zIndex: 2
+          transform: 'translateX(-50%)'
         }}>
           <a 
             href="#video-hero" 

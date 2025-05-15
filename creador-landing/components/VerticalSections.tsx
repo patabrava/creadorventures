@@ -14,17 +14,17 @@ interface VerticalSectionProps {
 const verticalSections: VerticalSectionProps[] = [
   {
     title: 'Startup Sourcing and Events',
-    description: 'We scout rising talent through cultural gatherings that mix music, art, and local tech scenes. Each event feeds the Startup League, giving partners a first look at high-potential teams.',
+    description: 'We scout rising talent through cultural gatherings that mix music, art, and local tech scenes.',
     imagePath: '/dark founders.png'
   },
   {
     title: 'Venture Studio',
-    description: 'Our studio backs founders with capital, hands-on guidance, and shared resources. Current projects include The Hub, Fitchin, Solana ID, VIIO, and Heartstocks.',
+    description: 'Our studio backs founders with capital, hands-on guidance, and shared resources.',
     imagePath: '/ChatGPT Image 8. Mai 2025, 04_38_09.png'
   },
   {
     title: 'Psychology Research Advisory',
-    description: 'PRA publishes open reports on counter-cyclical trends and runs bespoke studies for funds, corporates, and public bodies seeking clear insight into underdog markets.',
+    description: 'Reports on counter-cyclical trends running studies for funds, corporates, and public bodies seeking insight into underdog markets.',
     imagePath: '/PRA.png'
   }
 ];
