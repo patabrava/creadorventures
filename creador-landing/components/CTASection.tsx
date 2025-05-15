@@ -30,47 +30,34 @@ export default function CTASection({ id }: CTAProps) {
     <section 
       id={id}
       ref={ref}
-      className={`${isVisible ? 'visible' : ''}`}
+      className={`cta-section ${isVisible ? 'visible' : ''}`}
       style={{
         backgroundColor: 'var(--ink)',
         color: 'var(--paper)',
-        padding: 'var(--space-xxxl) var(--space-lg)',
         position: 'relative',
         marginBottom: 0
       }}
     >
       <div className="container" style={{ maxWidth: '1400px', margin: '0 auto' }}>
-        <h2 style={{
+        <h2 className="cta-title" style={{
           fontWeight: 300,
           fontSize: 'clamp(var(--font-size-xl), 5vw, var(--font-size-xxl))',
           lineHeight: 1.05,
-          marginBottom: 'var(--space-xxl)',
           textAlign: 'center'
         }}>
           Ready to connect?
         </h2>
         
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: 'var(--space-xxl)',
-          margin: 'var(--space-xxl) auto',
+        <div className="cta-grid" style={{
           maxWidth: '1200px'
         }}>
           {/* Contact Us CTA */}
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center',
-            padding: 'var(--space-lg)',
-            minHeight: '360px',
-            justifyContent: 'space-between'
+          <div className="cta-item" style={{
           }}>
-            <h3 style={{ fontWeight: 300, fontSize: '36px', marginBottom: 'var(--space-lg)' }}>
+            <h3 style={{ fontWeight: 300 }}>
               Contact Us
             </h3>
-            <p style={{ marginBottom: 'var(--space-xl)', fontSize: '20px', lineHeight: 1.5 }}>
+            <p>
               Book a call to discuss partnership opportunities or learn more about our verticals.
             </p>
             <CtaButton 
@@ -92,19 +79,12 @@ export default function CTASection({ id }: CTAProps) {
           </div>
           
           {/* Apply for Funding CTA */}
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center',
-            padding: 'var(--space-lg)',
-            minHeight: '360px',
-            justifyContent: 'space-between'
+          <div className="cta-item" style={{
           }}>
-            <h3 style={{ fontWeight: 300, fontSize: '36px', marginBottom: 'var(--space-lg)' }}>
+            <h3 style={{ fontWeight: 300 }}>
               Apply for Funding
             </h3>
-            <p style={{ marginBottom: 'var(--space-xl)', fontSize: '20px', lineHeight: 1.5 }}>
+            <p>
               Send your deck and apply for funding through our streamlined process.
             </p>
             <CtaButton 
@@ -128,19 +108,12 @@ export default function CTASection({ id }: CTAProps) {
           </div>
           
           {/* Become a Sponsor CTA */}
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center',
-            padding: 'var(--space-lg)',
-            minHeight: '360px',
-            justifyContent: 'space-between'
+          <div className="cta-item" style={{
           }}>
-            <h3 style={{ fontWeight: 300, fontSize: '36px', marginBottom: 'var(--space-lg)' }}>
+            <h3 style={{ fontWeight: 300 }}>
               Become a Sponsor
             </h3>
-            <p style={{ marginBottom: 'var(--space-xl)', fontSize: '20px', lineHeight: 1.5 }}>
+            <p>
               Schedule a call to discuss sponsoring our next event or initiative.
             </p>
             <CtaButton 
@@ -180,6 +153,91 @@ export default function CTASection({ id }: CTAProps) {
         fallbackEmail={fallbackEmail}
         title="Book a Call"
       />
+      <style jsx>{`
+        .cta-section {
+          padding: var(--space-xl) var(--space-lg);
+        }
+        .cta-title {
+          margin-bottom: var(--space-lg);
+        }
+        .cta-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: var(--space-lg);
+          margin: var(--space-xl) auto;
+          max-width: 1200px;
+        }
+        .cta-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          padding: var(--space-lg);
+          min-height: auto;
+          justify-content: space-between;
+          border: 1px solid var(--paper- आम्ही-alpha-20, rgba(255,255,255,0.2));
+          border-radius: var(--border-radius-md, 8px);
+        }
+        .cta-item h3 {
+          font-size: 28px;
+          margin-bottom: var(--space-md);
+          line-height: 1.2;
+        }
+        .cta-item p {
+          font-size: 16px;
+          line-height: 1.6;
+          margin-bottom: var(--space-lg);
+          flex-grow: 1;
+        }
+        
+        @media (min-width: 768px) {
+          .cta-section {
+            padding: var(--space-xxl) var(--space-lg);
+          }
+          .cta-title {
+            margin-bottom: var(--space-xl);
+          }
+          .cta-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-xl);
+            margin: var(--space-xl) auto;
+          }
+          .cta-item h3 {
+            font-size: 32px;
+            margin-bottom: var(--space-lg);
+          }
+          .cta-item p {
+            font-size: 18px;
+            margin-bottom: var(--space-xl);
+          }
+        }
+
+        @media (min-width: 1024px) {
+          .cta-section {
+            padding: var(--space-xxxl) var(--space-lg);
+          }
+          .cta-title {
+            margin-bottom: var(--space-xxl);
+          }
+          .cta-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-xxl);
+            margin: var(--space-xxl) auto;
+          }
+          .cta-item {
+            padding: var(--space-lg);
+            min-height: 360px;
+          }
+          .cta-item h3 {
+            font-size: 36px;
+            margin-bottom: var(--space-lg);
+          }
+          .cta-item p {
+            font-size: 20px;
+            margin-bottom: var(--space-xl);
+          }
+        }
+      `}</style>
     </section>
   );
 } 
