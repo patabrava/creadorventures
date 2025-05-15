@@ -10,32 +10,26 @@ interface PortfolioGridProps {
 }
 
 /**
- * A responsive grid to display portfolio companies following the neo-brutalist style
+ * A responsive portfolio grid following neo-brutalist minimalism
+ * Displays company logos in a horizontally aligned grid
  */
 export default function PortfolioGrid({ items }: PortfolioGridProps) {
-  // Animation hook to work with global CSS section visibility
   const { ref, isVisible } = useAnimatedVisibility();
 
-  // Sort items by order field
-  const sortedItems = [...items].sort((a, b) => a.order - b.order);
-
   const handlePortfolioClick = (title: string, url: string) => {
-    // Track click event for analytics
     trackEvent('cta_click', { 
       cta_text: `Portfolio: ${title}`,
       destination: url
     });
-    
-    // Open in new tab
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
-  // Second row logos - now the only row
-  const logosToDisplay = [
+  // Portfolio logos matching reference image but with only our two
+  const portfolioCompanies = [
     {
       title: "The Hub",
-      logo: "/images/portfolio/THE HUB LOGO .jpg",
-      url: sortedItems.find(item => item.slug === 'the-hub')?.companyUrl || 'https://thehub.example.com'
+      logo: "/images/portfolio/THE HUB LOGO .jpg", 
+      url: items.find(item => item.slug === 'the-hub')?.companyUrl || 'https://thehub.io'
     },
     {
       title: "Viio",
@@ -46,39 +40,81 @@ export default function PortfolioGrid({ items }: PortfolioGridProps) {
 
   return (
     <section 
-      ref={ref} 
-      className={`py-20 px-6 bg-paper text-ink ${isVisible ? 'visible' : ''}`}
+      ref={ref}
+      className={`${isVisible ? 'visible' : ''}`}
+      style={{
+        padding: '80px 24px 120px',
+        backgroundColor: 'var(--paper)',
+        color: 'var(--ink)',
+        overflow: 'hidden'
+      }}
     >
-      <div className="container mx-auto max-w-[1440px]">
-        <h2 className="text-center text-[clamp(56px,8vw,120px)] font-light leading-[1.05] mb-48">
+      <div style={{
+        maxWidth: '1440px',
+        margin: '0 auto',
+        width: '100%'
+      }}>
+        {/* Headline styled similarly to Hero component */}
+        <h2 style={{
+          fontWeight: 300,
+          fontSize: 'clamp(56px, 8vw, 120px)',
+          lineHeight: 1.05,
+          letterSpacing: '-0.02em',
+          marginBottom: '120px',
+          color: 'var(--ink)',
+          textAlign: 'center'
+        }}>
           We give start-ups an<br />unfair advantage
         </h2>
         
-        {/* Portfolio Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 lg:gap-32 max-w-4xl mx-auto">
-          {logosToDisplay.map((company, index) => (
+        {/* Logo grid - horizontally centered with substantial spacing */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '80px',
+          width: '100%',
+          maxWidth: '1200px',
+          margin: '0 auto'
+        }}>
+          {portfolioCompanies.map((company, index) => (
             <div 
               key={`logo-${index}`}
-              className="relative group cursor-pointer"
               onClick={() => handlePortfolioClick(company.title, company.url)}
+              style={{
+                cursor: 'pointer',
+                position: 'relative',
+                transition: 'transform 300ms ease',
+                width: '100px',
+                height: '50px'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-8px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
             >
-              <div className="aspect-[3/2] flex items-center justify-center p-8 bg-white/5 rounded-2xl transition-all duration-300 hover:bg-white/10 hover:shadow-xl max-w-[400px] mx-auto w-full">
-                <div className="relative w-full h-full max-w-[280px] max-h-[120px] flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-                  <Image 
-                    src={company.logo}
-                    alt={`${company.title} logo`}
-                    fill
-                    style={{
-                      objectFit: 'contain',
-                      padding: '8%'
-                    }}
-                    className="transition-opacity duration-300"
-                    priority={index < 2}
-                  />
-                </div>
-              </div>
-              <div className="absolute -bottom-8 left-0 right-0 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <span className="text-sm font-medium">{company.title}</span>
+              <div style={{
+                position: 'relative',
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <Image 
+                  src={company.logo}
+                  alt={`${company.title} logo`}
+                  fill
+                  style={{ 
+                    objectFit: 'contain',
+                    maxWidth: '100%',
+                    maxHeight: '100%'
+                  }}
+                  priority
+                />
               </div>
             </div>
           ))}
