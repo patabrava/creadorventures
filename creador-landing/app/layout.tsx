@@ -28,14 +28,52 @@ export default function RootLayout({
       <body style={{
         margin: 0,
         padding: 0,
-        background: "var(--paper)",
-        color: "var(--ink)",
+        background: 'black',
+        color: 'white',
         fontFamily: '"Inter", "Helvetica Neue", Arial, sans-serif',
         overflow: "auto",
         display: "flex",
         flexDirection: "column",
-        minHeight: "100vh"
+        minHeight: "100vh",
+        opacity: 1,
+        animation: 'none !important',
+        transition: 'none !important'
       }}>
+        {/* Force animations to be disabled */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Remove animations to prevent white screen flicker
+              document.body.style.opacity = 1;
+              document.body.style.animation = 'none';
+              document.body.style.transition = 'none';
+              document.body.style.backgroundColor = 'black';
+              document.body.style.color = 'white';
+              
+              const styleElement = document.createElement('style');
+              styleElement.textContent = \`
+                body { 
+                  opacity: 1 !important; 
+                  animation: none !important; 
+                  transition: none !important;
+                  background-color: black !important;
+                  color: white !important;
+                }
+                section {
+                  opacity: 1 !important;
+                  transform: none !important;
+                  animation: none !important;
+                  transition: none !important;
+                }
+                @keyframes fadeIn {
+                  from, to { opacity: 1; }
+                }
+              \`;
+              document.head.appendChild(styleElement);
+            `
+          }}
+        />
+        
         {/* Wrap entire app with our Providers component */}
         <Providers>
           <GlobalCursorStyle />
@@ -50,11 +88,11 @@ export default function RootLayout({
             justifyContent: "space-between",
             alignItems: "center",
             padding: "var(--space-sm) var(--space-lg)",
-            backgroundColor: "var(--ink)",
-            color: "var(--paper)",
+            backgroundColor: "black",
+            color: "white",
             height: "80px"
           }}>
-            <div className="navbar-brand" style={{ color: "var(--paper)" }}>Creador Ventures</div>
+            <div className="navbar-brand" style={{ color: "white" }}>Creador Ventures</div>
             <Navigation />
           </header>
           
@@ -63,17 +101,19 @@ export default function RootLayout({
             overflow: "hidden",
             display: "block",
             flex: "1 0 auto",
-            // Add padding to ensure content isn't hidden behind fixed header
             paddingTop: "80px",
-            marginBottom: 0
+            marginBottom: 0,
+            backgroundColor: "black",
+            color: "white",
+            opacity: 1
           }}>
             {children}
           </main>
           
           {/* Neo-Brutalist footer with high-contrast dark background */}
           <footer style={{
-            backgroundColor: "var(--ink)",
-            color: "var(--paper)",
+            backgroundColor: "black",
+            color: "white",
             padding: "var(--space-xl)",
             width: "100%",
             flex: "0 0 auto",
@@ -91,7 +131,7 @@ export default function RootLayout({
                     style={{
                       display: "inline-flex",
                       alignItems: "center",
-                      color: "var(--paper)",
+                      color: "white",
                       textDecoration: "none",
                       fontSize: "18px",
                       marginLeft: "var(--space-xs)",

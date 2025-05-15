@@ -78,25 +78,25 @@
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Base fadeIn animation for body */
-    opacity: 0;
-    animation: fadeIn 500ms cubic-bezier(.25,.46,.45,.94) forwards;
+    /* Remove fadeIn animation for body */
+    opacity: 1;
+    /* animation: fadeIn 500ms cubic-bezier(.25,.46,.45,.94) forwards; */
   }
 
-  /* Section Base Styles Exactly as in style guide */
+  /* Section Base Styles - Remove animations */
   section {
     width: 100%;
     padding: 80px 24px;
     margin-bottom: var(--space-xxxl);
     max-width: 100%; 
-    opacity: 0.1;
-    transform: translateY(40px);
-    transition: opacity 600ms cubic-bezier(.35,0,.25,1), transform 600ms cubic-bezier(.35,0,.25,1);
+    opacity: 1; /* Remove opacity animation */
+    transform: none; /* Remove transform animation */
+    /* transition: opacity 600ms cubic-bezier(.35,0,.25,1), transform 600ms cubic-bezier(.35,0,.25,1); */
   }
 
   section.visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
 
   /* Typography Scale Exactly as in style guide */

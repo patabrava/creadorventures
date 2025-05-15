@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { trackEvent } from '@/core/analytics';
-import CustomCursor from '@/components/CustomCursor';
 
 export interface EventItem {
   id: string;
@@ -14,7 +13,7 @@ export interface EventItem {
   vimeoId?: string;
   width: number;
   height: number;
-  previewVideoSrc?: string; // Added for video preview
+  previewVideoSrc?: string;
 }
 
 interface SponsorCTA {
@@ -40,91 +39,42 @@ export default function EventsArchive({
   sponsorCTA, 
   onOpenCalendly 
 }: EventsArchiveProps) {
-  // Static refs
-  const sectionRef = useRef<HTMLDivElement>(null);
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
-  const [videoError, setVideoError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoError, setVideoError] = useState<boolean>(false);
   const modalRef = useRef<HTMLDivElement>(null);
-  const previewVideosRef = useRef<{[key: string]: HTMLVideoElement | null}>({});
-  const [showCustomCursors, setShowCustomCursors] = useState<{[key: string]: boolean}>({});
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  
-  // Calculate layout columns based on screen width
-  const galleryRef = useRef<HTMLDivElement>(null);
-  const [columns, setColumns] = useState(3);
-  
-  // Recalculate columns on resize
-  useEffect(() => {
-    const calculateColumns = () => {
-      const width = window.innerWidth;
-      if (width < 640) return 1;
-      if (width < 1024) return 2;
-      return 3;
-    };
-    
-    const handleResize = () => {
-      const newColumns = calculateColumns();
-      if (newColumns !== columns) {
-        setColumns(newColumns);
-      }
-    };
-    
-    // Initial calculation
-    setColumns(calculateColumns());
-    
-    // Add resize listener
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [columns]);
   
   // Sort events by date (newest first)
   const sortedEvents = [...events].sort((a, b) => 
     new Date(b.date).getTime() - new Date(a.date).getTime()
   );
-  
-  // Initialize preview videos
+
+  // Force animation skip on mount
   useEffect(() => {
-    // Initialize muted preview videos for events with vimeoId/videoUrl
-    sortedEvents.forEach(event => {
-      if ((event.videoUrl || event.vimeoId) && event.previewVideoSrc) {
-        const videoElement = previewVideosRef.current[event.id];
-        if (videoElement) {
-          videoElement.muted = true;
-          videoElement.loop = true;
-          videoElement.playsInline = true;
-          
-          // Try to autoplay the preview
-          videoElement.play().catch(error => {
-            console.log(`Preview autoplay prevented for ${event.id}:`, error);
-            // We don't show errors for preview autoplay restrictions
-          });
-        }
-      }
+    // Skip all animations to fix white screen bug
+    document.body.style.opacity = '1';
+    document.body.style.animation = 'none';
+    document.body.style.transition = 'none';
+    
+    const sections = document.querySelectorAll('section');
+    sections.forEach(section => {
+      section.style.opacity = '1';
+      section.style.transform = 'none';
+      section.style.animation = 'none';
+      section.style.transition = 'none';
+      section.classList.add('visible');
     });
     
-    // Store refs for cleanup
-    const videoRefs = { ...previewVideosRef.current };
-    
-    // Cleanup on unmount
-    return () => {
-      Object.values(videoRefs).forEach(videoElement => {
-        if (videoElement) {
-          videoElement.pause();
-        }
-      });
-    };
-  }, [sortedEvents]);
+    console.log('DEBUG: EventsArchive - Animation skip applied');
+  }, []);
 
-  // Handle opening video modal
-  const openModal = (event: EventItem) => {
+  // Play video handler
+  const handlePlayClick = (event: EventItem) => {
     setIsLoading(true);
     setSelectedEvent(event);
     setVideoError(false);
-    setIsPlaying(true);
     
-    // Track event view
+    // Track event
     trackEvent('event_video_open', {
       event_title: event.title,
       event_date: event.date
@@ -133,59 +83,38 @@ export default function EventsArchive({
     // Lock scroll
     document.body.style.overflow = 'hidden';
     
-    // Load Vimeo script if needed and not already loaded
+    console.log('DEBUG: Opening video for event', event.id);
+    
+    // Load Vimeo script if needed
     if (event.vimeoId && !document.querySelector('script[src="https://player.vimeo.com/api/player.js"]')) {
       const script = document.createElement('script');
       script.src = 'https://player.vimeo.com/api/player.js';
       script.onload = () => {
-        console.log('Vimeo player script loaded successfully');
+        console.log('DEBUG: Vimeo script loaded successfully');
         setIsLoading(false);
-        trackEvent('event_video_opened', { vimeoId: event.vimeoId });
       };
       script.onerror = () => {
+        console.error('DEBUG: Failed to load Vimeo script');
         setVideoError(true);
         setIsLoading(false);
-        console.error('Failed to load Vimeo player script');
-        trackEvent('event_video_error', { vimeoId: event.vimeoId });
       };
       document.body.appendChild(script);
     } else {
-      // Script already loaded or not needed
       setIsLoading(false);
-      if (event.vimeoId) {
-        trackEvent('event_video_opened', { vimeoId: event.vimeoId });
-      }
     }
   };
   
-  // Handle closing video modal
-  const closeModal = () => {
+  // Close modal handler
+  const handleCloseModal = () => {
     setSelectedEvent(null);
     setVideoError(false);
-    setIsPlaying(false);
-    
-    // Release scroll lock
     document.body.style.overflow = '';
-    
-    // Pause video if playing
-    if (videoRef.current) {
-      videoRef.current.pause();
-    }
   };
   
   // Handle video error
   const handleVideoError = () => {
     setVideoError(true);
     setIsLoading(false);
-    console.error(`Video failed to load: ${selectedEvent?.videoUrl}`);
-    
-    // Track error
-    if (selectedEvent) {
-      trackEvent('event_video_error', {
-        event_title: selectedEvent.title,
-        event_date: selectedEvent.date
-      });
-    }
   };
   
   // Handle CTA click
@@ -202,424 +131,180 @@ export default function EventsArchive({
     });
   };
   
-  // Handle keyboard events for modal
-  useEffect(() => {
-    if (!selectedEvent) return;
-    
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        closeModal();
-      }
-    };
-    
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedEvent]);
-  
-  // Focus trap for modal
-  useEffect(() => {
-    if (!selectedEvent || !modalRef.current) return;
-    
-    const modal = modalRef.current;
-    const focusableElements = modal.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    
-    if (focusableElements.length === 0) return;
-    
-    const firstElement = focusableElements[0] as HTMLElement;
-    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
-    
-    // Focus first element when modal opens
-    firstElement.focus();
-    
-    const handleTabKey = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
-      
-      // If shift+tab on first element, move to last
-      if (e.shiftKey && document.activeElement === firstElement) {
-        e.preventDefault();
-        lastElement.focus();
-      } 
-      // If tab on last element, cycle to first
-      else if (!e.shiftKey && document.activeElement === lastElement) {
-        e.preventDefault();
-        firstElement.focus();
-      }
-    };
-    
-    window.addEventListener('keydown', handleTabKey);
-    return () => window.removeEventListener('keydown', handleTabKey);
-  }, [selectedEvent]);
-
-  // Mouse enter/leave handlers for custom cursor
-  const handleMouseEnter = (eventId: string) => {
-    setShowCustomCursors(prev => ({
-      ...prev,
-      [eventId]: true
-    }));
+  // Simple escape handler for modal
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      handleCloseModal();
+    }
   };
 
-  const handleMouseLeave = (eventId: string) => {
-    setShowCustomCursors(prev => ({
-      ...prev,
-      [eventId]: false
-    }));
-  };
-
-  // Handle play click
-  const handlePlayClick = (event: EventItem) => {
-    openModal(event);
-  };
-
-  // Arrange events into grid layout based on column count
-  const createGrid = () => {
-    const grid = Array.from({ length: columns }, () => [] as EventItem[]);
-    
-    // Distribute events across columns
-    let columnIndex = 0;
-    sortedEvents.forEach(event => {
-      grid[columnIndex].push(event);
-      columnIndex = (columnIndex + 1) % columns;
-    });
-    
-    return grid;
-  };
-  
-  const eventGrid = createGrid();
-  
-  // Main component styles to ensure visibility
-  const visibleStyle = {
-    opacity: 1,
-    transform: 'none',
-    visibility: 'visible' as const,
-    color: 'var(--paper)',
-    backgroundColor: 'var(--ink)'
-  };
-  
   return (
-          <section 
-      ref={sectionRef} 
-      className="pt-6 pb-32 px-6 bg-ink text-paper"
+    <section 
       id="past-events"
-      style={{
+      style={{ 
+        backgroundColor: 'black', 
+        color: 'white', 
         opacity: 1,
         transform: 'none',
-        visibility: 'visible',
-        backgroundColor: 'var(--ink)',
-        color: 'var(--paper)'
-      }}
+        animation: 'none',
+        transition: 'none'
+      }} 
+      className="py-16 px-6"
     >
-      <div 
-        className="container mx-auto max-w-[1440px]"
-        style={visibleStyle}
-      >
-        <div 
-          className="flex flex-col md:flex-row md:items-end justify-between mb-8 border-b border-paper pb-4"
-          style={{ ...visibleStyle, borderColor: 'var(--paper)' }}
-        >
-          <div style={visibleStyle}>
-            <h2 
-              className="text-[48px] font-light leading-tight mb-4 text-paper"
-              style={{ ...visibleStyle, color: 'var(--paper)' }}
-            >Past Events</h2>
-            <p 
-              className="text-[18px] leading-[28px] max-w-[600px] text-paper"
-              style={{ ...visibleStyle, color: 'var(--paper)' }}
-            >
-              Explore recordings from our archive of thought-provoking events and discussions.
-            </p>
-          </div>
+      <div className="max-w-[1440px] mx-auto" style={{ backgroundColor: 'black', color: 'white' }}>
+        {/* Header */}
+        <div className="mb-16 border-b-2 border-white pb-4" style={{ backgroundColor: 'black', color: 'white' }}>
+          <h2 className="text-5xl font-light mb-4">Past Events</h2>
+          <p className="text-lg max-w-[600px]">
+            Explore recordings from our archive of thought-provoking events and discussions.
+          </p>
         </div>
         
-        {/* Event Gallery */}
-                  <div 
-            ref={galleryRef} 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16 md:gap-x-12 md:gap-y-20"
-            style={visibleStyle}
-          >
-          {eventGrid.flat().map(item => (
-            // Event Card
+        {/* Brutal Minimalist Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {sortedEvents.map(event => (
             <div 
-              key={item.id}
-              className="group relative flex flex-col overflow-hidden transition-all duration-500 hover:translate-y-[-8px] hover:shadow-lg border-b-2 border-paper"
-              style={{ 
-                ...visibleStyle,
-                cursor: showCustomCursors[item.id] ? 'none' : 'pointer',
-                borderColor: 'var(--paper)',
-                marginBottom: '2.5rem', // Approximately 1cm
-                paddingBottom: '2.5rem'  // Additional padding before border
-              }}
-              onMouseEnter={() => (item.videoUrl || item.vimeoId) ? handleMouseEnter(item.id) : null}
-              onMouseLeave={() => (item.videoUrl || item.vimeoId) ? handleMouseLeave(item.id) : null}
-              onClick={() => (item.videoUrl || item.vimeoId) && !showCustomCursors[item.id] ? handlePlayClick(item) : null}
+              key={event.id} 
+              className="flex flex-col border-2 border-white mb-8"
+              style={{ backgroundColor: 'black', color: 'white' }}
             >
-              {/* Custom cursor that follows the mouse */}
-              {(item.videoUrl || item.vimeoId) && (
-                <CustomCursor 
-                  isVisible={showCustomCursors[item.id] || false} 
-                  onClick={() => handlePlayClick(item)}
-                />
-              )}
-              
-              {/* Event Media Preview */}
+              {/* Video Preview with Play Button */}
               <div 
-                className="aspect-[16/9] relative overflow-hidden bg-ink"
-                style={{ 
-                  ...visibleStyle, 
-                  backgroundColor: 'var(--ink)'
-                }}
+                className="relative aspect-video cursor-pointer"
+                style={{ backgroundColor: 'black' }}
+                onClick={() => handlePlayClick(event)}
               >
-                                  {/* Preview Video - silent autoplay when available */}
-                  {(item.videoUrl || item.vimeoId) && item.previewVideoSrc ? (
-                  <div className="flex justify-center items-center h-full w-full" style={{ position: 'absolute', inset: 0 }}>
-                    <video 
-                      ref={(el) => {
-                        previewVideosRef.current[item.id] = el;
-                      }}
-                      style={{
-                        width: item.width > item.height ? '100%' : 'auto',
-                        height: item.width > item.height ? 'auto' : '100%',
-                        maxHeight: '100%',
-                        maxWidth: '100%',
-                        objectFit: 'contain',
-                        opacity: 1,
-                        transition: 'opacity var(--transition-medium)'
-                      }}
-                      poster={item.previewImage}
-                      preload="auto"
-                      muted
-                      playsInline
-                      loop
-                    >
-                      <source src={item.previewVideoSrc} type="video/mp4" />
-                    </video>
-                  </div>
-                                  ) : (
-                    <div className="flex justify-center items-center h-full w-full" style={{ position: 'absolute', inset: 0 }}>
-                      <Image 
-                        src={item.previewImage}
-                        alt={`${item.title} preview`}
-                        className="object-contain"
-                        style={{
-                          ...visibleStyle,
-                          width: item.width > item.height ? '100%' : 'auto',
-                          height: item.width > item.height ? 'auto' : '100%',
-                          maxHeight: '100%',
-                          maxWidth: '100%'
-                        }}
-                        fill={false}
-                        width={800}
-                        height={450}
-                        sizes={`(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw`}
-                        priority={false}
-                      />
-                    </div>
+                {/* Show video preview if available, otherwise fallback image */}
+                {event.previewVideoSrc ? (
+                  <video
+                    src={event.previewVideoSrc}
+                    poster={event.previewImage}
+                    className="object-cover w-full h-full absolute inset-0"
+                    style={{ objectFit: 'cover', backgroundColor: 'black' }}
+                    muted
+                    playsInline
+                    preload="metadata"
+                  />
+                ) : (
+                  <Image 
+                    src={event.previewImage}
+                    alt={event.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
                 )}
-                
-                {/* Play button overlay - only show when custom cursor is not active */}
-                {(item.videoUrl || item.vimeoId) && !showCustomCursors[item.id] && (
-                  <div 
-                    className="absolute inset-0 flex items-center justify-center bg-ink bg-opacity-40"
-                    style={{
-                      ...visibleStyle,
-                      backgroundColor: 'var(--ink)',
-                      opacity: 0.4
-                    }}
-                  >
-                    <div 
-                      className="w-16 h-16 border border-paper rounded-full flex items-center justify-center bg-ink bg-opacity-70"
-                      style={{ 
-                        ...visibleStyle,
-                        borderColor: 'var(--paper)',
-                        backgroundColor: 'var(--ink)',
-                        opacity: 0.7
-                      }}
-                    >
-                      <span 
-                        className="text-paper text-xl"
-                        style={{ ...visibleStyle, color: 'var(--paper)' }}
-                      >▶</span>
-                    </div>
+                {/* Play Button - solid black overlay, no opacity/transition */}
+                <div className="absolute inset-0 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                  <div className="w-20 h-20 border-4 border-white rounded-full flex items-center justify-center" style={{ backgroundColor: 'black' }}>
+                    <span className="text-white text-4xl">▶</span>
                   </div>
-                )}
+                </div>
               </div>
-              
-              {/* Event Info */}
-              <div 
-                className="p-8 bg-ink flex-grow"
-                style={{ ...visibleStyle, backgroundColor: 'var(--ink)' }}
-              >
-                <div 
-                  className="text-graphite-40 text-[16px] mb-2"
-                  style={visibleStyle}
-                >{item.date}</div>
-                <h3 
-                  className="text-[28px] font-light mb-0 text-paper" 
-                  style={{ ...visibleStyle, color: 'var(--paper)' }}
-                >{item.title}</h3>
+              {/* Event Information */}
+              <div className="p-6 flex-grow" style={{ backgroundColor: 'black', color: 'white' }}>
+                <p className="text-gray-400 mb-2">{event.date}</p>
+                <h3 className="text-2xl font-light mb-0">{event.title}</h3>
               </div>
             </div>
-          ))}  
+          ))}
+        </div>
+        
+        {/* Sponsor CTA */}
+        <div className="mt-16 pt-16 border-t-2 border-white">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-8">
+            <div className="flex-1">
+              <h3 className="text-3xl font-light mb-4">{sponsorCTA.title}</h3>
+              <p className="text-lg mb-4">{sponsorCTA.description}</p>
+            </div>
+            <button 
+              onClick={handleCTAClick}
+              className="border-2 border-white py-3 px-8 text-lg hover:bg-white hover:text-black"
+              style={{ backgroundColor: 'black', color: 'white' }}
+            >
+              Schedule a Call
+            </button>
+          </div>
         </div>
       </div>
       
-      {/* Video Modal */}
+      {/* Video Modal - Brutalist Version */}
       {selectedEvent && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-95 z-[9999] flex items-center justify-center p-4"
-          onClick={closeModal}
-          style={{ 
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.95)',
-            zIndex: 9999,
-            overflow: 'hidden'
-          }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ backgroundColor: 'black' }}
+          onClick={handleCloseModal}
+          onKeyDown={handleKeyDown}
+          tabIndex={0}
+          ref={modalRef}
         >
           <div 
-            ref={modalRef}
-            className="relative bg-black max-w-6xl w-full max-h-[90vh] overflow-hidden"
+            className="relative max-w-6xl w-full border-2 border-white"
+            style={{ backgroundColor: 'black', color: 'white' }}
             onClick={(e) => e.stopPropagation()}
-            style={{ 
-              ...visibleStyle, 
-              backgroundColor: 'black',
-              position: 'relative',
-              zIndex: 10000
-            }}
           >
+            {/* Close Button */}
             <button 
-              className="absolute top-4 right-4 z-[10001] w-12 h-12 flex items-center justify-center text-paper text-[24px] border border-paper rounded-full hover:bg-paper hover:text-ink transition-colors"
-              onClick={closeModal}
+              className="absolute top-4 right-4 z-[60] w-12 h-12 flex items-center justify-center text-white text-3xl border-2 border-white bg-black hover:bg-white hover:text-black"
+              style={{ backgroundColor: 'black', color: 'white' }}
+              onClick={handleCloseModal}
               aria-label="Close video"
-              style={{ 
-                ...visibleStyle, 
-                color: 'var(--paper)', 
-                borderColor: 'var(--paper)',
-                zIndex: 10001,
-                position: 'absolute'
-              }}
             >
               ×
             </button>
             
-            {/* Loading state */}
+            {/* Loading State */}
             {isLoading && (
-              <div 
-                className="absolute inset-0 flex items-center justify-center bg-ink bg-opacity-90 z-[10002]"
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  zIndex: 10002,
-                  backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                <div className="loader"></div>
+              <div className="absolute inset-0 flex items-center justify-center z-[70]" style={{ backgroundColor: 'black' }}>
+                <div className="w-12 h-12 border-t-2 border-white rounded-full animate-spin"></div>
               </div>
             )}
             
+            {/* Error State */}
             {videoError ? (
-              <div 
-                className="flex flex-col items-center justify-center p-16 text-center"
-                style={visibleStyle}
-              >
-                <p 
-                  className="text-paper text-[18px] mb-8" 
-                  style={{ ...visibleStyle, color: 'var(--paper)' }}
-                >Sorry, this video cannot be played.</p>
+              <div className="p-16 flex flex-col items-center justify-center text-center" style={{ backgroundColor: 'black', color: 'white' }}>
+                <p className="text-xl mb-8">Sorry, this video cannot be played.</p>
                 <button 
-                  className="bg-paper text-ink px-8 py-3 rounded-full"
-                  onClick={closeModal}
-                  style={{ 
-                    ...visibleStyle, 
-                    backgroundColor: 'var(--paper)', 
-                    color: 'var(--ink)' 
-                  }}
+                  className="border-2 border-white py-3 px-8 hover:bg-white hover:text-black"
+                  style={{ backgroundColor: 'black', color: 'white' }}
+                  onClick={handleCloseModal}
                 >
                   Close
                 </button>
               </div>
             ) : (
-              <div 
-                className="w-full relative overflow-hidden"
-                style={{ 
-                  paddingBottom: '56.25%',
-                  backgroundColor: 'black',
-                  position: 'relative',
-                  width: '100%',
-                  overflow: 'hidden'
-                }}
-              >
+              <div className="relative" style={{ paddingBottom: '56.25%', backgroundColor: 'black' }}>
                 {selectedEvent.vimeoId ? (
                   <iframe 
                     src={`https://player.vimeo.com/video/${selectedEvent.vimeoId}?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&transparent=0&background=0`}
-                    frameBorder="0" 
+                    frameBorder="0"
                     allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" 
-                    style={{ 
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '100%',
-                      zIndex: 10000
-                    }} 
+                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'black' }}
                     title={selectedEvent.title}
+                    onError={handleVideoError}
                   />
                 ) : (
                   <video
-                    ref={videoRef}
                     src={selectedEvent.videoUrl}
-                    style={{ 
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'contain', 
-                      zIndex: 10000
-                    }}
-                    controls={true}
-                    autoPlay={true}
+                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'black' }}
+                    controls
+                    autoPlay
                     onError={handleVideoError}
                   />
                 )}
               </div>
             )}
             
-            <div 
-              className="p-8 bg-black"
-              style={{ ...visibleStyle, backgroundColor: 'black' }}
-            >
-              <div 
-                className="text-graphite-40 text-[16px] mb-2" 
-                style={visibleStyle}
-              >{selectedEvent.date}</div>
-              <h3 
-                className="text-[36px] font-light text-paper" 
-                style={{ ...visibleStyle, color: 'var(--paper)' }}
-              >{selectedEvent.title}</h3>
+            {/* Event Info */}
+            <div className="p-8" style={{ backgroundColor: 'black', color: 'white' }}>
+              <p className="text-gray-400 mb-2">{selectedEvent.date}</p>
+              <h3 className="text-3xl font-light">{selectedEvent.title}</h3>
             </div>
           </div>
         </div>
       )}
-
-      {/* CSS for loader */}
+      
       <style jsx>{`
-        .loader {
-          border: 4px solid rgba(255, 255, 255, 0.3);
-          border-radius: 50%;
-          border-top: 4px solid var(--paper);
-          width: 50px;
-          height: 50px;
-          animation: spin 1s linear infinite;
-        }
-        
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
