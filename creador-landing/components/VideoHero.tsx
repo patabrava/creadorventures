@@ -2,7 +2,6 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { useAnimatedVisibility } from '@/hooks/useAnimatedVisibility';
-import VideoOverlay from './VideoOverlay';
 import VideoError from './VideoError';
 import CustomCursor from './CustomCursor';
 
@@ -185,15 +184,6 @@ export default function VideoHero({ previewVideoSrc, vimeoId, posterSrc }: Video
               title="Creador Ventures Video"
             />
           </div>
-        )}
-
-        {/* Video overlay with play button - hidden when custom cursor is active */}
-        {!isPlaying && !showCustomCursor && (
-          <VideoOverlay 
-            isPlaying={isPlaying} 
-            isLoading={isLoading} 
-            onPlayClick={handlePlayClick} 
-          />
         )}
 
         {/* Error message */}

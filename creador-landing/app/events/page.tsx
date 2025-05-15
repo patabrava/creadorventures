@@ -6,13 +6,13 @@ import CalendlyModal from '@/components/CalendlyModal';
 import Link from 'next/link';
 import CtaButton from '@/components/CtaButton';
 
-// Events data with direct video references
-const eventsData: EventItem[] = [
+// Sample data for the EventsArchive component
+const sampleEvents: EventItem[] = [
   {
     id: 'grit-bogota',
     title: 'GRIT Bogota',
     date: 'March 25, 2024',
-    previewImage: '/founders.png',
+    previewImage: 'https://picsum.photos/seed/gritbogota/800/450',
     previewVideoSrc: '/videos/0515.mp4',
     vimeoId: '1084443296',
     width: 16,
@@ -22,7 +22,7 @@ const eventsData: EventItem[] = [
     id: 'metapartyhub-bogota',
     title: 'MetaPartyHub Bogota',
     date: 'October 20, 2023',
-    previewImage: '/PRA.png',
+    previewImage: 'https://picsum.photos/seed/metapartyhub/800/450',
     previewVideoSrc: '/videos/kaputtcompressed.mp4',
     vimeoId: '1084461559',
     width: 9,
@@ -32,7 +32,7 @@ const eventsData: EventItem[] = [
     id: 'grit-ba',
     title: 'Grit Buenos Aires',
     date: 'August 12, 2023',
-    previewImage: '/founders.png',
+    previewImage: 'https://picsum.photos/seed/gritba/800/450',
     previewVideoSrc: '/videos/grit ba compressed .mp4',
     vimeoId: '1084461541',
     width: 9,
@@ -165,7 +165,7 @@ export default function EventsPage() {
       
       {/* Event Archive Section */}
       <EventsArchive 
-        events={eventsData}
+        events={sampleEvents}
         sponsorCTA={sponsorCTA}
         onOpenCalendly={handleOpenCalendly}
       />
